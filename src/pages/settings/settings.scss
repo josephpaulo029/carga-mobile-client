@@ -1,0 +1,26 @@
+page-settings {
+    .user-avatar {
+        width: 100%;
+    }
+
+    .check-circle {
+        color: #32db64;
+        font-size: 1.7em;
+        padding-right: 5px;
+    }
+
+    #upload {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        z-index: 999;
+    }
+
+    .item {
+        background: #2f3338;
+        color: #fff;
+    }
+}

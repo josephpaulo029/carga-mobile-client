@@ -1,15 +1,56 @@
 import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { NavController, IonicPage } from 'ionic-angular';
+import { AccountService } from '../../providers/account.api';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
   selector: 'page-settings',
-  templateUrl: 'settings.html'
+  templateUrl: 'settings.html',
+  providers: [AccountService]
 })
 export class SettingsPage {
 
-    constructor() {
+    user: any = {};
+    isSuccess: Boolean = false;
+    isLoading: Boolean = false;
 
+    constructor(private accountService: AccountService, 
+        private navCtrl: NavController,
+        private storage: Storage) {
     }
 
+    ionViewWillEnter() {
+        this.getUser();
+    }
+
+    getUser() {
+        this.isLoading = true;
+        this.storage.get('authToken').then( token => {
+            this.accountService.get(token).subscribe( data => {
+                this.isLoading = false;
+                this.user = data['data'];
+            });
+        });
+    }
+
+    fileChangeEvent(event: any): void {
+        this.navCtrl.push('CropPhotoPage', {
+            imageChangedEvent: event,
+            mode: 'account'
+        });
+    }
+
+    updateUser(user) {
+        this.isSuccess = false;
+        this.storage.get('authToken').then( token => {
+            this.accountService.update(user, token).subscribe( () => {
+                this.isSuccess = true;
+            });
+        });
+    }
+
+    changePassword(user) {
+        this.navCtrl.push('ChangePasswordPage');
+    }
 }
