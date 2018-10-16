@@ -3,10 +3,10 @@ import { IonicPage } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-settings',
+  templateUrl: 'settings.html'
 })
-export class HomePage {
+export class SettingsPage {
 
     constructor() {
 

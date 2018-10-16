@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../providers/auth.api';
 
-import { LoginPage, HomePage } from '../pages';
+import { LoginPage, TabsPage } from '../pages';
 @Component({
   templateUrl: 'app.html',
   providers: [AuthService]
@@ -24,7 +24,7 @@ export class MyApp {
     this.storage.get('authToken').then ( value => {
       console.log('test');
       if(value) {
-        this.rootPage = HomePage;
+        this.rootPage = TabsPage;
         this.user = this.auth.decodeToken(value);
         this.menuCtrl.enable(true);
       } else {
