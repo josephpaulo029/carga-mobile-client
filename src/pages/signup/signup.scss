@@ -1,6 +1,6 @@
-page-login {
+page-signup {
  
-    .login-content {
+    .signup-content {
         background: color($colors, background);
  
         .logo-row {
@@ -17,17 +17,13 @@ page-login {
             color: color($colors, foreground);
         }
 
-        .login-box {
+        .signup-box {
             margin-top: 10px;
         }
     
         ion-row {
             align-items: center;
             text-align: center;
-        }
-
-        .error-text {
-            color: red;
         }
     
         ion-item {
