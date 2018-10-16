@@ -1,0 +1,35 @@
+<ion-content class="login-content" padding>
+    <ion-row class="logo-row">
+        <ion-col></ion-col>
+        <ion-col width-67>
+            <h1 ion-text class="logo-text">cognity.io</h1>
+            <label ion-text class="logo-subtext">Dash (Alpha)</label>
+        </ion-col>
+        <ion-col></ion-col>
+    </ion-row>
+
+    <div class="login-box">
+        <form (ngSubmit)="login(user)" #loginForm="ngForm">
+            <ion-row>
+                <ion-col>
+                    <ion-list inset>
+                        <ion-item>
+                            <ion-input type="text" placeholder="Username" name="username" [(ngModel)]="user.username" required></ion-input>
+                        </ion-item>
+                        
+                        <ion-item>
+                            <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="user.password" required></ion-input>
+                        </ion-item>
+                    </ion-list>
+                </ion-col>
+            </ion-row>
+            
+            <ion-row>
+                <ion-col class="signup-col">
+                    <button ion-button class="submit-btn" full type="submit" [disabled]="!loginForm.form.valid || isLoading">Signin</button>
+                    <button ion-button class="register-btn" type="button" block clear (click)="createAccount()">New to cognity? Signup</button>
+                </ion-col>
+            </ion-row>
+        </form>
+    </div>
+</ion-content>
