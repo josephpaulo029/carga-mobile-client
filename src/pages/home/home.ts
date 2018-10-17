@@ -15,7 +15,7 @@ export class HomePage {
 
     }
 
-    ionViewWillEnter() {
+    ionViewDidEnter() {
         this.loadMap();
     }
 
