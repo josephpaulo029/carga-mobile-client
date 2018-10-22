@@ -1,17 +1,17 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import leaflet from 'leaflet';
 
 @IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-request-delivery',
+  templateUrl: 'request-delivery.html'
 })
-export class HomePage {
-    @ViewChild('map') mapContainer: ElementRef;
+export class RequestDeliveryPage {
+    @ViewChild('map-small') mapContainer: ElementRef;
     map: any;
-
-    constructor(private navCtrl: NavController) {
+    requestObj: any = {};
+    constructor() {
 
     }
 
@@ -20,15 +20,11 @@ export class HomePage {
     }
 
     loadMap() {
-        this.map = leaflet.map("map").fitWorld();
+        this.map = leaflet.map("map-small").fitWorld();
         leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attributions: 'www.tphangout.com',
         maxZoom: 18
         }).addTo(this.map);
-    }
-
-    requestDelivery() {
-        this.navCtrl.push('RequestDeliveryPage');
     }
 
 }

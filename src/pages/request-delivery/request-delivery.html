@@ -1,0 +1,48 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>
+            Home
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div id="map-small" style="width:100%; height:60%;"></div>
+
+    <ion-list>
+        <ion-item>
+            <ion-label>Pickup Location</ion-label>
+            <ion-input required [(ngModel)]="requestObj.username" name="username"></ion-input> 
+        </ion-item>
+        <ion-item>
+            <ion-label>Destination</ion-label>
+            <ion-input required [(ngModel)]="requestObj.email" name="email"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Package Type</ion-label>
+            <ion-select required [(ngModel)]="requestObj.type" name="type">
+                <ion-option>test</ion-option>
+                <ion-option>test</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Package Weight</ion-label>
+            <ion-input required [(ngModel)]="requestObj.weight" name="weight"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Package Size</ion-label>
+            <ion-input required [(ngModel)]="requestObj.size" name="size"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Receiver Contact Number</ion-label>
+            <ion-input required [(ngModel)]="requestObj.contact" name="contact"></ion-input>
+        </ion-item>
+    </ion-list>
+
+    <div text-center>
+        <button ion-button margin-top margin-bottom>Send Request</button>
+    </div>
+</ion-content>
