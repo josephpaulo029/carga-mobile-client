@@ -7,12 +7,29 @@ page-request-delivery {
         margin: 0 !important;
     }
 
+    .container-fluid {
+        position: absolute;
+        bottom: 60px;
+        left: 0;
+        right: 0;
+    }
+
+    .list {
+        font-size: 13px;
+        margin-top: -14px;
+    }
+
+    .send-request {
+        margin-top: -8px !important;
+        float: right;
+    }
+
     .next {
         float: right;
         margin: 0 !important;
     }
 
-    h4 {
+    h5 {
         display: inline-block;
     }
 

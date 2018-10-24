@@ -29,7 +29,7 @@
             </ion-item>
     
             <div text-center>
-                <h4 ion-text color="primary" (click)="currentPage = 2">Next</h4>
+                <h5 ion-text color="primary" (click)="currentPage = 2">Next</h5>
             </div>
         </ion-list>
     
@@ -43,8 +43,8 @@
                 <ion-input required [(ngModel)]="deliveryObj.custom.receiverContactNumber" name="contact"></ion-input>
             </ion-item>
             <div padding>
-                <h4 text-left ion-text color="primary" (click)="currentPage = 1">Previous</h4>
-                <h4 class="next" ion-text color="primary" (click)="currentPage = 3">Next</h4>
+                <h5 text-left ion-text color="primary" (click)="currentPage = 1">Previous</h5>
+                <h5 class="next" ion-text color="primary" (click)="currentPage = 3">Next</h5>
             </div>
         </ion-list>
     
@@ -69,8 +69,8 @@
                 <ion-input required [(ngModel)]="deliveryObj.dimension" name="dimension"></ion-input>
             </ion-item>
             <div padding>
-                <h4 text-left ion-text color="primary" (click)="currentPage = 2">Previous</h4>
-                <h4 class="next" ion-text color="primary" (click)="currentPage = 4">Next</h4>
+                <h5 text-left ion-text color="primary" (click)="currentPage = 2">Previous</h5>
+                <h5 class="next" ion-text color="primary" (click)="currentPage = 4">Next</h5>
             </div>
         </ion-list>
         
@@ -117,12 +117,12 @@
                 </ion-row>
             </div>
             <div padding>
-                <h4 text-left ion-text color="primary" (click)="currentPage = 3">Previous</h4>
-                <button ion-button class="next" [disabled]="!isValid() || isSaving" margin-top margin-bottom (click)="sendRequest(deliveryObj)">Send Request</button>
+                <h5 text-left ion-text color="primary" (click)="currentPage = 3">Previous</h5>
+                <button ion-button class="send-request" [disabled]="!isValid() || isSaving" margin-top margin-bottom (click)="sendRequest(deliveryObj)">Send Request</button>
             </div>
         </ion-list>
     </form>
-    <div class="container-fluid" *ngIf="currentPage != 4">
+    <div class="container-fluid">
         <ul class="list-unstyled multi-steps">
             <li [ngClass]="{'is-active': currentPage == 1}">Select Pickup Location/Date</li>
             <li [ngClass]="{'is-active': currentPage == 2}">Select Destination</li>
