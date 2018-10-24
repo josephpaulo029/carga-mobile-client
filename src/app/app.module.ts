@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
+import { DatePicker } from '@ionic-native/date-picker';
 
 import { MyApp } from './app.component';
 
@@ -26,6 +27,7 @@ import { MyApp } from './app.component';
   providers: [
     StatusBar,
     SplashScreen,
+    DatePicker,
     Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

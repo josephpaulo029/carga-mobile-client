@@ -13,28 +13,32 @@
 
     <ion-item>
         <ion-label>Type</ion-label>
-        <ion-select>
-            <ion-option>Pending</ion-option>
-            <ion-option>In Progress</ion-option>
-            <ion-option>Completed</ion-option>
+        <ion-select [(ngModel)]="filter.deliveryStatus" (ngModelChange)="getPackages(filter)">
+            <ion-option value="pending">Pending</ion-option>
+            <ion-option value="inProgress">In Progress</ion-option>
+            <ion-option value="completed">Completed</ion-option>
         </ion-select>
     </ion-item>
 
-    <ion-list margin-top>
-        <ion-card>
-            <ion-card-header>
-                <h2 class="card-title">Header</h2>
-            </ion-card-header>
+    <h4 ion-text text-center *ngIf="isLoading">Loading packages</h4>
+    <ion-list margin-top *ngIf="!isLoading">
+        <ion-card *ngFor="let package of packages">
             <ion-card-content>
-                The British use the term "header", but the American term "head-shot" the English simply refuse to adopt.
-            </ion-card-content>
-        </ion-card>
-        <ion-card>
-            <ion-card-header>
-                <h2 class="card-title">Header</h2>
-            </ion-card-header>
-            <ion-card-content>
-                The British use the term "header", but the American term "head-shot" the English simply refuse to adopt.
+                <p><span class="label">Pickup Date:</span> {{package.pickupDate | date: 'yyyy-MM-dd hh:mm a'}}</p>
+                <p><span class="label">Pickup Location:</span> {{package.pickupLocation}}</p>
+                <p><span class="label">Destination:</span> {{package.destination}}</p>
+                <p>
+                    <span class="label">Package Type:</span>
+                    {{package.packageType}}
+                </p>
+                <p>
+                    <span class="label">Dimension:</span>
+                    {{package.dimension}}
+                </p>
+                <p>
+                    <span class="label">Weight:</span>
+                    {{package.weight}}
+                </p>
             </ion-card-content>
         </ion-card>
     </ion-list>
