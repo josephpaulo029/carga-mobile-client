@@ -29,8 +29,13 @@
                 <p><span class="label">Destination:</span> {{package.destination}}</p>
                 <p>
                     <span class="label">Package Type:</span>
-                    {{package.packageType}}
-                </p>
+                    {{package.packageType === 'perishableFood' ? 'Perishable Food' : ''}}
+                    {{package.packageType === 'preservedFood' ? 'Preserved Food' : ''}}
+                    {{package.packageType === 'document' ? 'Document' : ''}}
+                    {{package.packageType === 'electronics' ? 'Electronics' : ''}}
+                    {{package.packageType === 'clothing' ? 'Clothing' : ''}}
+                    {{package.packageType === 'default' ? 'Default' : ''}}
+            </p>
                 <p>
                     <span class="label">Dimension:</span>
                     {{package.dimension}}

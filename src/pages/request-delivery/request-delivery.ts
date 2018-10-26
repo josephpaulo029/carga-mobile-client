@@ -3,6 +3,7 @@ import { IonicPage, ToastController, NavController, ModalController } from 'ioni
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth.api';
 import { DeliveryService } from '../../providers/delivery.api';
+import { NotificationService } from '../../providers/notification.api';
 import { DatePicker } from '@ionic-native/date-picker';
 import leaflet from 'leaflet';
 
@@ -12,7 +13,7 @@ declare var google:any;
 @Component({
   selector: 'page-request-delivery',
   templateUrl: 'request-delivery.html',
-  providers: [AuthService, DeliveryService]
+  providers: [AuthService, DeliveryService, NotificationService]
 })
 export class RequestDeliveryPage {
     @ViewChild('map-small') mapContainer: ElementRef;
@@ -35,6 +36,7 @@ export class RequestDeliveryPage {
         private toast: ToastController,
         private navCtrl: NavController,
         private modalCtrl: ModalController,
+        private notificationService: NotificationService,
         private deliveryService: DeliveryService,
         private auth: AuthService) {
     }
@@ -66,6 +68,16 @@ export class RequestDeliveryPage {
         delivery.deliveryStatus = 'pending.clientRequest';
         this.storage.get('authToken').then( token => {
             this.deliveryService.create(delivery, token).subscribe( () => {
+                
+                let notification = {
+                    ownerId: delivery.ownerId,
+                    title: 'Owner - ' + delivery.ownerId,
+                    description: 'Delivery request from Cebu to Tagaytay',
+                    type: 'carga-owner-delivery-pending'
+                };
+                this.notificationService.create(notification, token).subscribe( () => {
+
+                });
                 let toast = this.toast.create({
                     message: 'Request has been sent',
                     duration: 3000,

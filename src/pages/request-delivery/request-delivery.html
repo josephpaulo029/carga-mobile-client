@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-    <div id="map-small" style="width:100%; height:30%;" margin-bottom></div>
+    <div id="map-small" style="width:100%; height:50%;" margin-bottom [ngClass]="{'hide': currentPage == 4}"></div>
     <form #deliveryForm="ngForm">
         <ion-list *ngIf="currentPage == 1">
             <ion-item (click)="selectDate($event)">
@@ -27,10 +27,6 @@
                 <ion-label>Pickup Location</ion-label>
                 <ion-input required [(ngModel)]="selectedPickup" disabled name="pickuplocation"></ion-input> 
             </ion-item>
-    
-            <div text-center>
-                <h5 ion-text color="primary" (click)="currentPage = 2">Next</h5>
-            </div>
         </ion-list>
     
         <ion-list *ngIf="currentPage == 2">
@@ -42,10 +38,6 @@
                 <ion-label>Receiver Contact Number</ion-label>
                 <ion-input required [(ngModel)]="deliveryObj.custom.receiverContactNumber" name="contact"></ion-input>
             </ion-item>
-            <div padding>
-                <h5 text-left ion-text color="primary" (click)="currentPage = 1">Previous</h5>
-                <h5 class="next" ion-text color="primary" (click)="currentPage = 3">Next</h5>
-            </div>
         </ion-list>
     
         <ion-list *ngIf="currentPage == 3">
@@ -68,13 +60,9 @@
                 <ion-label>Package Size</ion-label>
                 <ion-input required [(ngModel)]="deliveryObj.dimension" name="dimension"></ion-input>
             </ion-item>
-            <div padding>
-                <h5 text-left ion-text color="primary" (click)="currentPage = 2">Previous</h5>
-                <h5 class="next" ion-text color="primary" (click)="currentPage = 4">Next</h5>
-            </div>
         </ion-list>
         
-        <ion-list *ngIf="currentPage == 4">
+        <ion-list *ngIf="currentPage == 4" class="details-container">
             <div padding>
                 <ion-row>
                     <ion-col>Pick up Date</ion-col>
@@ -122,12 +110,12 @@
             </div>
         </ion-list>
     </form>
-    <div class="container-fluid">
+    <div class="container-fluid" *ngIf="currentPage != 4">
         <ul class="list-unstyled multi-steps">
-            <li [ngClass]="{'is-active': currentPage == 1}">Select Pickup Location/Date</li>
-            <li [ngClass]="{'is-active': currentPage == 2}">Select Destination</li>
-            <li [ngClass]="{'is-active': currentPage == 3}">Fill-up Details</li>
-            <li>Wrap Up</li>
+            <li (click)="currentPage = 1" [ngClass]="{'is-active': currentPage == 1}">Select Pickup Location/Date</li>
+            <li (click)="currentPage = 2" [ngClass]="{'is-active': currentPage == 2}">Select Destination</li>
+            <li (click)="currentPage = 3" [ngClass]="{'is-active': currentPage == 3}">Fill-up Details</li>
+            <li (click)="currentPage = 4">Wrap Up</li>
         </ul>
     </div>
 </ion-content>

@@ -1,22 +1,24 @@
 page-request-delivery {
-    .scroll-content {
-        margin-bottom: 0 !important;
-    }
-    ion-content > div {
-        padding: 0 !important;
-        margin: 0 !important;
+    .scroll-content{
+        margin-bottom: 0px !important;
+        padding-bottom: 0px !important;
     }
 
-    .container-fluid {
-        position: absolute;
-        bottom: 60px;
-        left: 0;
-        right: 0;
+    ion-col {
+        padding-left: 0 !important;
     }
 
     .list {
         font-size: 13px;
         margin-top: -14px;
+    }
+
+    .details-container {
+        margin-top: 0;
+    }
+
+    .hide {
+        display: none
     }
 
     .send-request {
@@ -33,7 +35,7 @@ page-request-delivery {
         display: inline-block;
     }
 
-    $brand-primary: tomato;
+    $brand-primary: green;
     $white: #fff;
     $grey-light: #ededed;
     %remain-steps{
@@ -96,10 +98,11 @@ page-request-delivery {
             }
 
             &.is-active{
+                color: #D54A44;
                 @extend %remain-steps;
                 &:before{
                     background-color: $white;
-                    border-color: $brand-primary;
+                    border-color: #D54A44;
                 }
 
                 ~ li{

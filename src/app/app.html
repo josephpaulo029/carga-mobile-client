@@ -1,1 +1,20 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="content">
+    <ion-header>
+        <ion-toolbar>
+            <ion-title>
+            <img class="title-logo" [src]="user.avatar" *ngIf="user.avatar != 'null'">
+            <img class="title-logo" src="assets/imgs/default-user.png" *ngIf="user.avatar == 'null'">
+            {{user.username}}
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content>
+        <ion-list>
+            <button ion-item menuClose (click)="logout()">
+                <ion-icon margin-right name="log-out"></ion-icon>
+                Logout
+            </button>
+        </ion-list>
+    </ion-content>
+</ion-menu>
+<ion-nav #content [root]="rootPage"></ion-nav>

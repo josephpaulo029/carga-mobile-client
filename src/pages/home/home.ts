@@ -25,10 +25,17 @@ export class HomePage {
         attributions: 'www.tphangout.com',
         maxZoom: 18
         }).addTo(this.map);
+        
+        console.log('this.map', this.map.removeLayer);
     }
 
     requestDelivery() {
         this.navCtrl.push('RequestDeliveryPage');
+    }
+
+    ionViewWillLeave() {
+        console.log('this.map', this.map.removeLayer);
+        this.map.removeLayer();
     }
 
 }

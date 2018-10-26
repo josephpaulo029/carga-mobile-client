@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Platform, MenuController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, MenuController, AlertController, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -13,10 +13,12 @@ import { LoginPage, TabsPage } from '../pages';
 export class MyApp {
   rootPage:any = LoginPage;
   user: any = {};
+  @ViewChild(Nav) nav: Nav;
 
   constructor(platform: Platform, 
     statusBar: StatusBar, 
     splashScreen: SplashScreen, 
+    private alert: AlertController,
     private auth: AuthService,
     private menuCtrl: MenuController,
     private storage: Storage) {
@@ -40,6 +42,28 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
     });
+  }
+
+  logout() {
+    let alert = this.alert.create({
+      title: 'Warning',
+      message: 'Are you sure to logout?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.storage.remove('authToken');
+            this.nav.push('LoginPage');
+            this.menuCtrl.enable(false);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 }
 
