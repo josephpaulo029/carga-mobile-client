@@ -33,6 +33,9 @@ export class SignupPage {
             toast.present();
             return;
         }
+
+        user.groupId = 'admin.carga';
+        user.type = 'client';
         this.accountService.create(user).subscribe( data => {
             this.isLoading = false;
             let toast = this.toast.create({

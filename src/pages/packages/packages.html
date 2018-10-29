@@ -21,7 +21,8 @@
     </ion-item>
 
     <h4 ion-text text-center *ngIf="isLoading">Loading packages</h4>
-    <ion-list margin-top *ngIf="!isLoading">
+    <h4 ion-text text-center *ngIf="!isLoading && !packages.length">No packages</h4>
+    <ion-list margin-top *ngIf="!isLoading && packages.length">
         <ion-card *ngFor="let package of packages">
             <ion-card-content>
                 <p><span class="label">Pickup Date:</span> {{package.pickupDate | date: 'yyyy-MM-dd hh:mm a'}}</p>

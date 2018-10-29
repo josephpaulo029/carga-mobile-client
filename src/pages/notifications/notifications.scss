@@ -2,4 +2,16 @@ page-notifications {
     .card-title {
         font-weight: bold;
     }
+
+    .item {
+        padding: 0;
+    }
+
+    ion-item-options {
+        border-bottom: none !important;
+    }
+
+    .card-content {
+        white-space: normal;
+    }
 }
