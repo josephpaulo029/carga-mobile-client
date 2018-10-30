@@ -63,29 +63,29 @@
         </ion-list>
         
         <ion-list *ngIf="currentPage == 4" class="details-container">
-            <div padding>
-                <ion-row>
-                    <ion-col>Pick up Date</ion-col>
+            <div>
+                <ion-item>
+                    <ion-col class="value-text">Pick up Date</ion-col>
                     <ion-col>{{selectedDate}}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col>Pick up Time</ion-col>
+                </ion-item>
+                <ion-item>
+                    <ion-col class="value-text">Pick up Time</ion-col>
                     <ion-col>{{formatTime(selectedTime)}}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col>Pick up Location</ion-col>
+                </ion-item>
+                <ion-item>
+                    <ion-col class="value-text">Pick up Location</ion-col>
                     <ion-col>{{selectedPickup}}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col>Destination</ion-col>
+                </ion-item>
+                <ion-item>
+                    <ion-col class="value-text">Destination</ion-col>
                     <ion-col>{{selectedDestination}}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col>Receiver Contact Number</ion-col>
+                </ion-item>
+                <ion-item>
+                    <ion-col class="value-text">Receiver Contact Number</ion-col>
                     <ion-col>{{deliveryObj.custom.receiverContactNumber}}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col>Package Type</ion-col>
+                </ion-item>
+                <ion-item>
+                    <ion-col class="value-text">Package Type</ion-col>
                     <ion-col>
                         {{deliveryObj.packageType === 'perishableFood' ? 'Perishable Food' : ''}}
                         {{deliveryObj.packageType === 'preservedFood' ? 'Preserved Food' : ''}}
@@ -94,17 +94,17 @@
                         {{deliveryObj.packageType === 'clothing' ? 'Clothing' : ''}}
                         {{deliveryObj.packageType === 'default' ? 'Default' : ''}}
                     </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col>Package Weight</ion-col>
+                </ion-item>
+                <ion-item>
+                    <ion-col class="value-text">Package Weight</ion-col>
                     <ion-col>{{deliveryObj.weight}}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col>Package Size</ion-col>
+                </ion-item>
+                <ion-item>
+                    <ion-col class="value-text">Package Size</ion-col>
                     <ion-col>{{deliveryObj.dimension}}</ion-col>
-                </ion-row>
+                </ion-item>
             </div>
-            <div padding>
+            <div padding margin-top>
                 <h5 text-left ion-text color="primary" (click)="currentPage = 3">Previous</h5>
                 <button ion-button class="send-request" [disabled]="!isValid() || isSaving" margin-top margin-bottom (click)="sendRequest(deliveryObj)">Send Request</button>
             </div>

@@ -92,7 +92,6 @@ export class RequestDeliveryPage {
 
     selectDate(event) {
         event.stopPropagation();
-        console.log('test');
         this.datePicker.show({
             date: new Date(),
             mode: 'date',
@@ -148,7 +147,6 @@ export class RequestDeliveryPage {
             this.deliveryObj.destination = '';
             modal.onDidDismiss( data => {
                 if(data){
-                    console.log('data', data.description);
                     this.selectedDestination = data.description;
     
                     this.geocoder = new google.maps.Geocoder();
@@ -166,7 +164,6 @@ export class RequestDeliveryPage {
             this.deliveryObj.pickupLocation = '';
             modal.onDidDismiss( data => {
                 if(data){
-                    console.log('data', data.description);
                     this.selectedPickup = data.description;
     
                     this.geocoder = new google.maps.Geocoder();

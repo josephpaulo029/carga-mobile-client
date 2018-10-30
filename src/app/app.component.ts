@@ -24,7 +24,6 @@ export class MyApp {
     private storage: Storage) {
 
     this.storage.get('authToken').then ( value => {
-      console.log('test');
       if(value) {
         this.rootPage = TabsPage;
         this.user = this.auth.decodeToken(value);
