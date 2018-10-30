@@ -10,7 +10,9 @@ import { AccountService } from '../../providers/account.api';
 })
 export class SignupPage {
 
-    user: any = {};
+    user: any = {
+        custom: {}
+    };
     isLoading: Boolean = false;
 
     constructor(public navCtrl: NavController, 
