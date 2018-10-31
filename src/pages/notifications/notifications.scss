@@ -7,6 +7,10 @@ page-notifications {
         padding: 0;
     }
 
+    .is-unread {
+        background: #e4e4e4;
+    }
+
     ion-item-options {
         border-bottom: none !important;
     }
