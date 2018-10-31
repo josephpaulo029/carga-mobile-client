@@ -1,14 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, MenuController, AlertController, Nav } from 'ionic-angular';
+import { Platform, MenuController, AlertController, Nav, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../providers/auth.api';
+import { AccountService } from '../providers/account.api';
 
 import { LoginPage, TabsPage } from '../pages';
 @Component({
   templateUrl: 'app.html',
-  providers: [AuthService]
+  providers: [AuthService, AccountService]
 })
 export class MyApp {
   rootPage:any = LoginPage;
@@ -20,13 +21,21 @@ export class MyApp {
     splashScreen: SplashScreen, 
     private alert: AlertController,
     private auth: AuthService,
+    private events: Events,
+    private accountService: AccountService,
     private menuCtrl: MenuController,
     private storage: Storage) {
+
+    this.events.subscribe('update:user', () => {
+      this.storage.get('authToken').then ( value => {
+        this.getUser(value);
+      });
+    })
 
     this.storage.get('authToken').then ( value => {
       if(value) {
         this.rootPage = TabsPage;
-        this.user = this.auth.decodeToken(value);
+        this.getUser(value);
         this.menuCtrl.enable(true);
       } else {
         this.rootPage = LoginPage;
@@ -40,6 +49,12 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+    });
+  }
+
+  getUser(token) {
+    this.accountService.get(token).subscribe( data => {
+      this.user = data['data'] || {};
     });
   }
 

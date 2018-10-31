@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, IonicPage, ToastController, NavParams } from 'ionic-angular';
+import { NavController, IonicPage, ToastController, NavParams, Events } from 'ionic-angular';
 import { AccountService } from '../../providers/account.api';
 import { Storage } from '@ionic/storage';
 import { UploadService } from '../../providers/upload.api';
@@ -22,6 +22,7 @@ export class CropPhotoPage {
     constructor(public navParams: NavParams, 
         private storage: Storage,
         public navCtrl: NavController,
+        private events: Events,
         private accountService: AccountService,
         private authService: AuthService,
         private toast: ToastController,
@@ -53,6 +54,7 @@ export class CropPhotoPage {
                 this.user.avatar = data['imageUrl'];
 
                 this.accountService.update(this.user, this.token).subscribe( data => {
+                    this.events.publish('update:user');
                     this.uploadSuccess(data['imageUrl']);
                 });
             } else if(this.mode === 'device') {

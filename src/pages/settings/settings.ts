@@ -15,7 +15,7 @@ export class SettingsPage {
     isSuccess: Boolean = false;
     isLoading: Boolean = false;
 
-    constructor(private accountService: AccountService, 
+    constructor(private accountService: AccountService,
         private navCtrl: NavController,
         private storage: Storage) {
     }
