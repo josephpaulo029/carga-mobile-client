@@ -13,6 +13,7 @@ export class LoginPage {
     
     user: any = {};
     isLoading: Boolean = false;
+    errorMessage: any;
 
     constructor(public navCtrl: NavController, 
         private storage: Storage,
@@ -32,13 +33,21 @@ export class LoginPage {
             });
         }, error => {
             let toast = this.toast.create({
-                message: 'Invalid credentials',
+                message: this.capitalizeFirstLetter(error.error.response),
                 duration: 3000,
                 position: 'bottom'
             });
             toast.present();
             this.isLoading = false;
         })
+    }
+
+    capitalizeFirstLetter(string) {
+        if(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    
+        return string;
     }
 
     createAccount() {
