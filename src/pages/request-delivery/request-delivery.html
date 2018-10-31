@@ -106,16 +106,16 @@
             </div>
             <div padding margin-top>
                 <h5 text-left ion-text color="primary" (click)="currentPage = 3">Previous</h5>
-                <button ion-button class="send-request" [disabled]="!isValid() || isSaving" margin-top margin-bottom (click)="sendRequest(deliveryObj)">Send Request</button>
+                <button ion-button class="send-request" [disabled]="isSaving" margin-top margin-bottom (click)="sendRequest(deliveryObj)">Send Request</button>
             </div>
         </ion-list>
     </form>
     <div class="container-fluid" *ngIf="currentPage != 4">
         <ul class="list-unstyled multi-steps">
-            <li (click)="currentPage = 1" [ngClass]="{'is-active': currentPage == 1}">Select Pickup Location/Date</li>
-            <li (click)="currentPage = 2" [ngClass]="{'is-active': currentPage == 2}">Select Destination</li>
-            <li (click)="currentPage = 3" [ngClass]="{'is-active': currentPage == 3}">Fill-up Details</li>
-            <li (click)="currentPage = 4">Wrap Up</li>
+            <li (click)="visitPage(1)" [ngClass]="{'is-active': currentPage == 1}">Select Pickup Location/Date</li>
+            <li (click)="visitPage(2)" [ngClass]="{'is-active': currentPage == 2}">Select Destination</li>
+            <li (click)="visitPage(3)" [ngClass]="{'is-active': currentPage == 3}">Fill-up Details</li>
+            <li (click)="visitPage(4)">Wrap Up</li>
         </ul>
     </div>
 </ion-content>

@@ -74,9 +74,53 @@ export class RequestDeliveryPage {
         })
     }
 
+    visitPage(page) {
+        if(page == 4) {
+            if(!(this.selectedDate && this.selectedTime 
+                && this.deliveryObj.pickupLocation && this.deliveryObj.destination 
+                && this.deliveryObj.custom.receiverContactNumber && this.deliveryObj.packageType 
+                && this.deliveryObj.weight & this.deliveryObj.dimension)) {
+                    this.errorVisitingPage();
+                    return;
+            }
+        }
+
+        if(page > this.currentPage) {
+            if(this.currentPage == 1) {
+                if(!(this.selectedDate && this.selectedTime && this.deliveryObj.pickupLocation)) {
+                    this.errorVisitingPage();
+                    return;
+                }
+    
+            } else if(this.currentPage == 2) {
+                if(!(this.deliveryObj.destination && this.deliveryObj.custom.receiverContactNumber)) {
+                    this.errorVisitingPage();
+                    return;
+                }
+    
+            } else if(this.currentPage == 3) {
+                if(!(this.deliveryObj.packageType && this.deliveryObj.weight & this.deliveryObj.dimension)) {
+                    this.errorVisitingPage();
+                    return;
+                }
+            }
+        }
+
+        this.currentPage = page;
+    }
+
+    errorVisitingPage() {
+        let toast = this.toast.create({
+            message: 'Fields must be filled up before proceeding',
+            duration: 3000,
+            position: 'bottom'
+        });
+        toast.present();
+    }
+
     sendRequest(delivery) {
         this.isSaving = true;
-        delivery.ownerId = 'test';
+        delivery.ownerId = 'test1212';
         delivery.driver = 'null';
         delivery.pickupDate = new Date(this.selectedDate + ' ' + this.selectedTime).getTime();
         delivery.deliveryStatus = 'pending.clientRequest';
@@ -134,14 +178,6 @@ export class RequestDeliveryPage {
         return time;
     }
 
-    isValid() {
-        if(this.selectedDate && this.selectedTime 
-            && this.deliveryObj.pickupLocation && this.deliveryObj.destination 
-            && this.deliveryObj.custom.receiverContactNumber && this.deliveryObj.packageType 
-            && this.deliveryObj.weight & this.deliveryObj.dimension)
-            return true;
-    }
-
     formatDate(date) {
         var monthNames = [
           "January", "February", "March",
@@ -160,7 +196,6 @@ export class RequestDeliveryPage {
     showModal(type) {
         let modal = this.modalCtrl.create('SearchAddressPage');
         if(type === 'destination') {
-            this.deliveryObj.destination = '';
             modal.onDidDismiss( data => {
                 if(data){
                     this.selectedDestination = data.description;
@@ -177,7 +212,6 @@ export class RequestDeliveryPage {
     
             modal.present();
         } else {
-            this.deliveryObj.pickupLocation = '';
             modal.onDidDismiss( data => {
                 if(data){
                     this.selectedPickup = data.description;
