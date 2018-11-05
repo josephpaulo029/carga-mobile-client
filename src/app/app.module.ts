@@ -8,6 +8,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 import { DatePicker } from '@ionic-native/date-picker';
 
+import { SocketIoModule } from 'ng-socket-io';
+
 import { MyApp } from './app.component';
 
 @NgModule({

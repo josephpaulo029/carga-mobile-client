@@ -2,6 +2,6 @@
     <ion-tab [root]="home" tabIcon="home"></ion-tab>
     <ion-tab [root]="packages" tabIcon="logo-dropbox"></ion-tab>
     <ion-tab [root]="settings" tabIcon="settings"></ion-tab>
-    <ion-tab [root]="notifications" tabBadge="14" tabBadgeStyle="danger" tabIcon="notifications">
+    <ion-tab [root]="notifications" tabBadge="{{unreads || ''}}" tabBadgeStyle="danger" tabIcon="notifications">
     </ion-tab>
 </ion-tabs>

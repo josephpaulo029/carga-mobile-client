@@ -3,13 +3,13 @@ import { Platform, MenuController, AlertController, Nav, Events } from 'ionic-an
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
-import { AuthService } from '../providers/auth.api';
 import { AccountService } from '../providers/account.api';
+import { NotificationSocket } from '../providers/notification.service';
 
 import { LoginPage, TabsPage } from '../pages';
 @Component({
   templateUrl: 'app.html',
-  providers: [AuthService, AccountService]
+  providers: [AccountService, NotificationSocket]
 })
 export class MyApp {
   rootPage:any = LoginPage;
@@ -20,8 +20,8 @@ export class MyApp {
     statusBar: StatusBar, 
     splashScreen: SplashScreen, 
     private alert: AlertController,
-    private auth: AuthService,
     private events: Events,
+    private notificationSocket: NotificationSocket,
     private accountService: AccountService,
     private menuCtrl: MenuController,
     private storage: Storage) {
@@ -47,6 +47,9 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+      this.subscribeNotification();
+      this.listenToNotifications();
+
       statusBar.styleDefault();
       splashScreen.hide();
     });
@@ -55,6 +58,18 @@ export class MyApp {
   getUser(token) {
     this.accountService.get(token).subscribe( data => {
       this.user = data['data'] || {};
+    });
+  }
+
+  listenToNotifications() {
+    this.notificationSocket.on('notification', data => {
+      console.log('data', data);
+    });
+  }
+
+  subscribeNotification() {
+    this.storage.get('authToken').then ( value => {
+      this.notificationSocket.emit('subscribe', value);
     });
   }
 
