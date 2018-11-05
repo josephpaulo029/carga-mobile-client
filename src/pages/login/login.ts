@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, IonicPage, MenuController, Events, ToastController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth.api';
 import { Storage } from '@ionic/storage';
+import { NotificationSocket } from '../../providers/notification.service';
 
 @IonicPage()
 @Component({
@@ -18,6 +19,7 @@ export class LoginPage {
     constructor(public navCtrl: NavController, 
         private storage: Storage,
         private events: Events,
+        private notificationSocket: NotificationSocket,
         private toast: ToastController,
         private menuCtrl: MenuController,
         private authService: AuthService) {}
@@ -29,6 +31,7 @@ export class LoginPage {
                 this.isLoading = false;
                 this.navCtrl.push('TabsPage');
                 this.events.publish('loggedIn');
+                this.notificationSocket.emit('subscribe', data['response']);
                 this.menuCtrl.enable(true);
             });
         }, error => {

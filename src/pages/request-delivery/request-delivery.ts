@@ -77,7 +77,7 @@ export class RequestDeliveryPage {
             if(!(this.selectedDate && this.selectedTime 
                 && this.deliveryObj.pickupLocation && this.deliveryObj.destination 
                 && this.deliveryObj.custom.receiverContactNumber && this.deliveryObj.packageType 
-                && this.deliveryObj.weight & this.deliveryObj.dimension)) {
+                && this.deliveryObj.weight && this.deliveryObj.dimension)) {
                     this.errorVisitingPage();
                     return;
             }

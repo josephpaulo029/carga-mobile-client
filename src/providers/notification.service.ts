@@ -1,4 +1,4 @@
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Socket } from 'ng-socket-io';
 import { url } from './url'; 
 

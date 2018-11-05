@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 import { AccountService } from '../providers/account.api';
 import { NotificationSocket } from '../providers/notification.service';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { LoginPage, TabsPage } from '../pages';
 @Component({
@@ -21,6 +22,7 @@ export class MyApp {
     splashScreen: SplashScreen, 
     private alert: AlertController,
     private events: Events,
+    private localNotification: LocalNotifications,
     private notificationSocket: NotificationSocket,
     private accountService: AccountService,
     private menuCtrl: MenuController,
@@ -63,13 +65,18 @@ export class MyApp {
 
   listenToNotifications() {
     this.notificationSocket.on('notification', data => {
-      console.log('data', data);
+      this.localNotification.schedule({
+        title: 'Carga',
+        text: data.title
+      });
     });
   }
 
   subscribeNotification() {
     this.storage.get('authToken').then ( value => {
-      this.notificationSocket.emit('subscribe', value);
+      if(value) {
+        this.notificationSocket.emit('subscribe', value);
+      }
     });
   }
 
@@ -87,6 +94,7 @@ export class MyApp {
           handler: () => {
             this.storage.remove('authToken');
             this.nav.push('LoginPage');
+            this.notificationSocket.disconnect();
             this.menuCtrl.enable(false);
           }
         }
