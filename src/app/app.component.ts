@@ -32,7 +32,13 @@ export class MyApp {
       this.storage.get('authToken').then ( value => {
         this.getUser(value);
       });
-    })
+    });
+
+    this.events.subscribe('loggedIn', () => {
+      this.storage.get('authToken').then ( value => {
+        this.getUser(value);
+      });
+    });
 
     this.storage.get('authToken').then ( value => {
       if(value) {
