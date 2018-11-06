@@ -4,13 +4,14 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 import { AccountService } from '../providers/account.api';
+import { AuthService } from '../providers/auth.api';
 import { NotificationSocket } from '../providers/notification.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 
-import { LoginPage, TabsPage } from '../pages';
+import { LoginPage, TabsPage, VerifyClientPage } from '../pages';
 @Component({
   templateUrl: 'app.html',
-  providers: [AccountService, NotificationSocket]
+  providers: [AccountService, NotificationSocket, AuthService]
 })
 export class MyApp {
   rootPage:any = LoginPage;
@@ -22,45 +23,54 @@ export class MyApp {
     splashScreen: SplashScreen, 
     private alert: AlertController,
     private events: Events,
+    private auth: AuthService,
     private localNotification: LocalNotifications,
     private notificationSocket: NotificationSocket,
     private accountService: AccountService,
     private menuCtrl: MenuController,
     private storage: Storage) {
 
-    this.events.subscribe('update:user', () => {
-      this.storage.get('authToken').then ( value => {
-        this.getUser(value);
+      //when user is updated from settings page, update side menu header
+      this.events.subscribe('update:user', () => {
+        this.storage.get('authToken').then ( value => {
+          this.getUser(value);
+        });
       });
-    });
 
-    this.events.subscribe('loggedIn', () => {
-      this.storage.get('authToken').then ( value => {
-        this.getUser(value);
+      //if user logs in, update user details for the side menu header
+      this.events.subscribe('loggedIn', () => {
+        this.storage.get('authToken').then ( value => {
+          this.getUser(value);
+        });
       });
-    });
 
-    this.storage.get('authToken').then ( value => {
-      if(value) {
-        this.rootPage = TabsPage;
-        this.getUser(value);
-        this.menuCtrl.enable(true);
-      } else {
-        this.rootPage = LoginPage;
-        this.menuCtrl.enable(false);
-      }
-    });
+      //check if user is logged in, then redirect to home page
+      this.storage.get('authToken').then ( value => {
+        if(value) {
+          let userObj = this.auth.decodeToken(value);
+          if(userObj.validationStatus === 'pending') {
+            this.rootPage = VerifyClientPage;
+          } else {
+            this.rootPage = TabsPage;
+          }
+          this.getUser(value);
+          this.menuCtrl.enable(true);
+        } else {
+          this.rootPage = LoginPage;
+          this.menuCtrl.enable(false);
+        }
+      });
 
 
-    platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      this.subscribeNotification();
-      this.listenToNotifications();
+      platform.ready().then(() => {
+        // Okay, so the platform is ready and our plugins are available.
+        // Here you can do any higher level native things you might need.
+        this.subscribeNotification();
+        this.listenToNotifications();
 
-      statusBar.styleDefault();
-      splashScreen.hide();
-    });
+        statusBar.styleDefault();
+        splashScreen.hide();
+      });
   }
 
   getUser(token) {
@@ -78,6 +88,7 @@ export class MyApp {
     });
   }
 
+  //in order to receive notification topics, the app needs to subscribe to socket server
   subscribeNotification() {
     this.storage.get('authToken').then ( value => {
       if(value) {

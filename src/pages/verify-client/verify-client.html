@@ -1,0 +1,37 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>
+            Home
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <label ion-text>Your account is still for verification by the admin. You need to attach some image documents in order to verify.</label>
+
+    <h3 text-center>Attachments</h3>
+    <h3 text-center margin-top *ngIf="isLoading"><ion-spinner></ion-spinner></h3>
+    <ion-list *ngIf="!isLoading && user.custom && user.custom.attachments && user.custom.attachments.length">
+        <ion-item *ngFor="let attachment of user.custom.attachments; let i = index" (click)="viewAttachment(attachment)">
+            <span class="attachment-text">Attachment {{i+1}}</span>
+        </ion-item>
+    </ion-list>
+    <div class="image-upload" text-center>
+        <button ion-button>
+            Upload
+            <input type="file" id="upload"
+            (change)="uploadAttachment($event)" 
+            #fileInput
+            accept="image/jpeg, image/png" >
+        </button>
+    </div>
+
+    <ul class="list-unstyled multi-steps" margin-top *ngIf="!isLoading">
+        <li [ngClass]="{'is-active': user.custom && !user.custom.attachments && user.validationStatus === 'pending'}">Upload Documents</li>
+        <li [ngClass]="{'is-active': user.custom && user.custom.attachments && user.custom.attachments.length && user.validationStatus === 'pending'}">Verification</li>
+        <li [ngClass]="{'is-active': user.validationStatus === 'approved'}">Completed</li>
+    </ul>
+</ion-content>

@@ -1,0 +1,97 @@
+page-verify-client {
+    #upload {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        z-index: 999;
+    }
+
+    .attachment-text {
+        color: #0000EE;
+    }
+
+    $brand-primary: green;
+    $white: #fff;
+    $grey-light: #ededed;
+    %remain-steps{
+        &:before {
+            content: counter(stepNum);
+            font-family: inherit;
+            font-weight: 700;
+        }
+        &:after{
+            background-color: $grey-light;
+        }
+    }
+    .multi-steps{
+        padding: 0;
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+        > li{
+            counter-increment: stepNum;
+            text-align: center;
+            display: table-cell;
+            position: relative;
+            color: $brand-primary;
+
+            &:before{
+                content: '\f00c';
+                content: '\2713;';
+                content: '\10003';
+                content: '\10004';
+                content: '\2713';
+                display: block;
+                margin: 0 auto 4px;
+                background-color: $white;
+                width: 36px;
+                height: 36px;
+                line-height: 32px;
+                text-align: center;
+                font-weight: bold;
+                border: {
+                    width: 2px;
+                    style: solid;
+                    color: $brand-primary;
+                    radius: 50%;
+                }
+            }
+            &:after{
+                content: '';
+                height: 2px;
+                width: 100%;
+                background-color: $brand-primary;
+                position: absolute;
+                top: 16px;
+                left: 50%;
+                z-index: -1;
+            }
+            &:last-child{
+                &:after{
+                    display: none;
+                }
+            }
+
+            &.is-active{
+                color: #D54A44;
+                @extend %remain-steps;
+                &:before{
+                    background-color: $white;
+                    border-color: #D54A44;
+                }
+
+                ~ li{
+                    color: #808080;
+                    @extend %remain-steps;
+                    &:before{
+                    background-color: $grey-light;
+                    border-color: $grey-light;
+                    }
+                }
+            }
+        }
+    }
+}

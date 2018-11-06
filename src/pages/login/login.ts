@@ -29,7 +29,13 @@ export class LoginPage {
         this.authService.login(user).subscribe( data => {
             this.storage.set('authToken', data['response']).then( () => {
                 this.isLoading = false;
-                this.navCtrl.push('TabsPage');
+                let userObj = this.authService.decodeToken(data['response']);
+
+                if(userObj.validationStatus === 'pending') {
+                    this.navCtrl.setRoot('VerifyClientPage');
+                } else {
+                    this.navCtrl.push('TabsPage');
+                }
                 this.events.publish('loggedIn');
                 this.notificationSocket.emit('subscribe', data['response']);
                 this.menuCtrl.enable(true);
