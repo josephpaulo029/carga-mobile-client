@@ -80,11 +80,11 @@ export class MyApp {
   }
 
   listenToNotifications() {
-    this.notificationSocket.on('notification', data => {
+    this.notificationSocket.on('notification', notification => {
       this.events.publish('notifications');
       this.localNotification.schedule({
         title: 'Carga',
-        text: data.title
+        text: notification['data'].title
       });
     });
   }
