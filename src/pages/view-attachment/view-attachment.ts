@@ -12,7 +12,6 @@ export class ViewAttachmentPage {
 
     constructor(private navParams: NavParams) {
         this.attachment = navParams.get('attachment');
-        console.log('attachment', this.attachment);
     }
 
     ionViewWillEnter() {

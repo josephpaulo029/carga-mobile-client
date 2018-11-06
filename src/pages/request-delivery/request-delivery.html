@@ -53,7 +53,7 @@
                 </ion-select>
             </ion-item>
             <ion-item>
-                <ion-label>Package Weight</ion-label>
+                <ion-label>Package Weight (kg)</ion-label>
                 <ion-input type="number" required [(ngModel)]="deliveryObj.weight" name="weight"></ion-input>
             </ion-item>
             <ion-item>
@@ -112,10 +112,10 @@
     </form>
     <div class="container-fluid" *ngIf="currentPage != 4">
         <ul class="list-unstyled multi-steps">
-            <li (click)="visitPage(1)" [ngClass]="{'is-active': currentPage == 1}">Select Pickup Location/Date</li>
-            <li (click)="visitPage(2)" [ngClass]="{'is-active': currentPage == 2}">Select Destination</li>
-            <li (click)="visitPage(3)" [ngClass]="{'is-active': currentPage == 3}">Fill-up Details</li>
-            <li (click)="visitPage(4)">Wrap Up</li>
+            <li (click)="visitPage(1)" [ngClass]="{'is-active': currentPage == 1}">Pickup</li>
+            <li (click)="visitPage(2)" [ngClass]="{'is-active': currentPage == 2}">Destination</li>
+            <li (click)="visitPage(3)" [ngClass]="{'is-active': currentPage == 3}">Details</li>
+            <li (click)="visitPage(4)">Summary</li>
         </ul>
     </div>
 </ion-content>

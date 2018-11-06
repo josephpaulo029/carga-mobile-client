@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, Events } from 'ionic-angular';
 import { NotificationService } from '../../providers/notification.api'; 
 import { Storage } from '@ionic/storage';
 
@@ -11,9 +11,14 @@ import { Storage } from '@ionic/storage';
 export class NotificationsPage {
 
   notifications: any = [];
+  isLoading: Boolean = false;
   
-  constructor(private notificationService: NotificationService, private storage: Storage) {
-
+  constructor(private notificationService: NotificationService, 
+    private events: Events,
+    private storage: Storage) {
+      this.events.subscribe('notifications', () => {
+        this.getNotifications();
+      });
   }
 
   ionViewWillEnter() {
@@ -21,8 +26,10 @@ export class NotificationsPage {
   }
 
   getNotifications() {
+    this.isLoading = true;
     this.storage.get('authToken').then ( token => {
       this.notificationService.getAll(token).subscribe( data => {
+        this.isLoading = false;
         this.notifications = data['data'] || [];
       })
     });

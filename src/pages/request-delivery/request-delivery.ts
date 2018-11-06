@@ -73,32 +73,44 @@ export class RequestDeliveryPage {
     }
 
     visitPage(page) {
-        if(page == 4) {
-            if(!(this.selectedDate && this.selectedTime 
-                && this.deliveryObj.pickupLocation && this.deliveryObj.destination 
-                && this.deliveryObj.custom.receiverContactNumber && this.deliveryObj.packageType 
-                && this.deliveryObj.weight && this.deliveryObj.dimension)) {
-                    this.errorVisitingPage();
-                    return;
-            }
-        }
+        // if(page == 4) {
+        //     if(!(this.selectedDate && this.selectedTime 
+        //         && this.deliveryObj.pickupLocation && this.deliveryObj.destination 
+        //         && this.deliveryObj.custom.receiverContactNumber && this.deliveryObj.packageType 
+        //         && this.deliveryObj.weight && this.deliveryObj.dimension)) {
+        //             this.errorVisitingPage();
+        //             return;
+        //     }
+        // }
 
         if(page > this.currentPage) {
             if(this.currentPage == 1) {
-                if(!(this.selectedDate && this.selectedTime && this.deliveryObj.pickupLocation)) {
-                    this.errorVisitingPage();
+                if(page == 2) {
+                    if(!(this.selectedDate && this.selectedTime && this.deliveryObj.pickupLocation)) {
+                        this.errorVisitingPage();
+                        return;
+                    }
+                } else {
                     return;
                 }
     
             } else if(this.currentPage == 2) {
-                if(!(this.deliveryObj.destination && this.deliveryObj.custom.receiverContactNumber)) {
-                    this.errorVisitingPage();
+                if(page == 3) {
+                    if(!(this.deliveryObj.destination && this.deliveryObj.custom.receiverContactNumber)) {
+                        this.errorVisitingPage();
+                        return;
+                    }
+                } else {
                     return;
                 }
     
             } else if(this.currentPage == 3) {
-                if(!(this.deliveryObj.packageType && this.deliveryObj.weight & this.deliveryObj.dimension)) {
-                    this.errorVisitingPage();
+                if(page == 4) {
+                    if(!(this.deliveryObj.packageType && this.deliveryObj.weight & this.deliveryObj.dimension)) {
+                        this.errorVisitingPage();
+                        return;
+                    }
+                } else {
                     return;
                 }
             }

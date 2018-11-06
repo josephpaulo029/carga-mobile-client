@@ -10,33 +10,18 @@
 </ion-header>
 
 <ion-content>
-    <ion-list>
-        <ion-card>
+    <div text-center margin-top>
+        <ion-spinner *ngIf="isLoading"></ion-spinner>
+    </div>
+    <ion-list *ngIf="!isLoading && notifications.length">
+        <ion-card *ngFor="let notification of notifications">
             <ion-item-sliding #item>
                 <ion-item class="is-unread">
                     <ion-card-header>
-                        <h2 class="card-title">Truck XYZ890</h2>
+                        <h2 class="card-title">{{notification.title}}</h2>
                     </ion-card-header>
                     <ion-card-content>
-                        A truck nearby is available to accept your deliverysssssssss
-                    </ion-card-content>
-                </ion-item>
-                <ion-item-options side="right">
-                    <button ion-button>
-                        <ion-icon name="mail-open"></ion-icon>
-                        Mark as read
-                    </button>
-                </ion-item-options>
-            </ion-item-sliding>
-        </ion-card>
-        <ion-card>
-            <ion-item-sliding #item>
-                <ion-item>
-                    <ion-card-header>
-                        <h2 class="card-title">Your package has arrived</h2>
-                    </ion-card-header>
-                    <ion-card-content>
-                        XYC package arrived in Davao City
+                        {{notification.description}}
                     </ion-card-content>
                 </ion-item>
                 <ion-item-options side="right">
