@@ -40,7 +40,7 @@ export class VerifyClientPage {
           this.isLoading = false;
           this.user = user['data'];
           if(this.user.validationStatus == 'approved') {
-            this.navCtrl.push('TabsPage');
+            this.navCtrl.push('LoginPage');
           }
       });
     });

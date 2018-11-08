@@ -51,4 +51,17 @@ export class DeliveryService {
         return this.http.get(url, {headers, params});
     }
 
+    getOne(id, token) {
+        const url = this.url + '/custom-carga/delivery/owner/' + id;
+
+        const headers = new HttpHeaders({
+            'Content-Type':  'application/json',
+            'Authorization': 'Bearer ' + token,
+            'x-api-key': environment.apiKey
+        })
+
+        return this.http.get(url, {headers});
+
+    }
+
 }

@@ -29,6 +29,9 @@ export class RequestDeliveryPage {
     isSaving: Boolean = false;
     placesService:any;
     geocoder: any;
+    length: Number;
+    width: Number;
+    height: Number;
 
     constructor(private storage: Storage, 
         private datePicker: DatePicker,
@@ -83,30 +86,29 @@ export class RequestDeliveryPage {
         //     }
         // }
 
-        if(page > this.currentPage) {
-            if(this.currentPage == 1) {
-                if(page == 2) {
-                    if(!(this.selectedDate && this.selectedTime && this.deliveryObj.pickupLocation)) {
-                        this.errorVisitingPage();
-                        return;
-                    }
-                } else {
+        if(page > this.currentPage) {if(this.currentPage == 1) {
+            if(page == 2) {
+                if(!(this.selectedDate && this.selectedTime && this.deliveryObj.pickupLocation)) {
+                    this.errorVisitingPage();
                     return;
                 }
-    
-            } else if(this.currentPage == 2) {
-                if(page == 3) {
-                    if(!(this.deliveryObj.destination && this.deliveryObj.custom.receiverContactNumber)) {
-                        this.errorVisitingPage();
-                        return;
-                    }
-                } else {
+            } else {
+                return;
+            }
+
+        } else if(this.currentPage == 2) {
+            if(page == 3) {
+                if(!(this.deliveryObj.destination && this.deliveryObj.custom.receiverContactNumber)) {
+                    this.errorVisitingPage();
                     return;
                 }
-    
-            } else if(this.currentPage == 3) {
+            } else {
+                return;
+            }
+
+        } else if(this.currentPage == 3) {
                 if(page == 4) {
-                    if(!(this.deliveryObj.packageType && this.deliveryObj.weight & this.deliveryObj.dimension)) {
+                    if(!(this.deliveryObj.packageType && this.deliveryObj.weight && this.length && this.width && this.height)) {
                         this.errorVisitingPage();
                         return;
                     }
@@ -136,6 +138,9 @@ export class RequestDeliveryPage {
         delivery.deliveryStatus = 'pending.clientRequest';
         delivery.custom.senderEmail = this.user.email;
         delivery.custom.senderContactNumber = this.user.custom.contactNumber;
+        delivery.custom.pickupLocationAddressString = this.selectedPickup;
+        delivery.custom.destinationAddressString = this.selectedDestination;
+        delivery.dimension = this.length.toString() + 'x' + this.width.toString() + 'x' + this.height.toString();
         this.storage.get('authToken').then( token => {
             this.deliveryService.create(delivery, token).subscribe( () => {
                 let toast = this.toast.create({

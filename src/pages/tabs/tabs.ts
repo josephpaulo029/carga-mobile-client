@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, IonicPage, Events } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, IonicPage, Events, Tabs } from 'ionic-angular';
 import { NotificationService } from '../../providers/notification.api'; 
 import { Storage } from '@ionic/storage';
 import { HomePage, PackagesPage, SettingsPage, NotificationsPage } from '../';
@@ -16,6 +16,7 @@ export class TabsPage {
     settings: any = SettingsPage;
     notifications: any = NotificationsPage;
     unreads: number = 0;
+    @ViewChild('tabs') tabRef: Tabs;
 
     constructor(public navCtrl: NavController, 
       private storage: Storage,
@@ -24,6 +25,14 @@ export class TabsPage {
 
         this.events.subscribe('notifications', () => {
           this.getNotifications();
+        });
+
+        this.events.subscribe('update:notifications', () => {
+          this.getNotifications();
+        })
+
+        this.events.subscribe('change-page:settings', () => {
+          this.tabRef.select(2);
         });
     }
 

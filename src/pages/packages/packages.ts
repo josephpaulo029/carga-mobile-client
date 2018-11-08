@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 import { DeliveryService } from '../../providers/delivery.api';
 import { Storage } from '@ionic/storage';
 
@@ -15,8 +15,9 @@ export class PackagesPage {
   packages: any = [];
   isLoading: Boolean = false;
 
-  constructor(private deliveryService: DeliveryService, private storage: Storage) {
-
+  constructor(private deliveryService: DeliveryService, 
+    private navCtrl: NavController,
+    private storage: Storage) {
   }
 
   ionViewWillEnter() {
@@ -32,6 +33,12 @@ export class PackagesPage {
         this.packages = data['data'];
       });
     })
+  }
+
+  visitPackage(delivery) {
+    this.navCtrl.push('PackageItemPage', {
+      deliveryId: delivery.id
+    });
   }
 
 }

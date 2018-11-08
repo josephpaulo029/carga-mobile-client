@@ -12,7 +12,7 @@ export class NotificationService {
     constructor(private http: HttpClient) { }
 
     update(notification, token) {
-        const url = this.url + '/notification';
+        const url = this.url + '/notification/' + notification.notificationId;
 
         const httpOptions = {
             headers: new HttpHeaders({

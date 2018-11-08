@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, Events } from 'ionic-angular';
+import { IonicPage, Events, NavController } from 'ionic-angular';
 import { NotificationService } from '../../providers/notification.api'; 
 import { Storage } from '@ionic/storage';
 
@@ -15,6 +15,7 @@ export class NotificationsPage {
   
   constructor(private notificationService: NotificationService, 
     private events: Events,
+    private navCtrl: NavController,
     private storage: Storage) {
       this.events.subscribe('notifications', () => {
         this.getNotifications();
@@ -32,6 +33,27 @@ export class NotificationsPage {
         this.isLoading = false;
         this.notifications = data['data'] || [];
       })
+    });
+  }
+
+  visitNotification(notification) {
+    notification.isUnread = false;
+    this.storage.get('authToken').then( token => {
+      this.notificationService.update(notification, token).subscribe( () => {
+        this.events.publish('update:notifications');
+      });
+
+      if(notification.type == 'admin-registration-approved') {
+        this.events.publish('change-page:settings');
+      } else if(notification.type == 'driver-delivery-accepted' 
+      || notification.type == 'driver-delivery-forPickup' 
+      || notification.type == 'driver-delivery-forDropoff'
+      || notification.type == 'driver-delivery-completed'
+      || notification.type == 'driver-delivery-enRoute') {
+        this.navCtrl.push('PackageItemPage', {
+          deliveryId: notification.childId
+        });
+      }
     });
   }
 

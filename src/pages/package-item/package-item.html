@@ -1,0 +1,72 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            Package
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-card>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col text-left>
+                        {{package.custom.pickupLocationAddressString || ''}}
+                    </ion-col>
+                    <ion-col text-center>
+                        <ion-icon ios="ios-arrow-round-forward" md="md-arrow-round-forward"></ion-icon>
+                    </ion-col>
+                    <ion-col text-right>
+                        {{package.custom.destinationAddressString || ''}}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col text-center>
+                        <ion-note>{{package.pickupDate | date:"MM / dd / yy - h:mm a "}}</ion-note>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col col-5>
+                        <ion-note>
+                            {{package.packageType === 'perishableFood' ? 'Perishable Food' : ''}}
+                            {{package.packageType === 'preservedFood' ? 'Preserved Food' : ''}}
+                            {{package.packageType === 'document' ? 'Document' : ''}}
+                            {{package.packageType === 'electronics' ? 'Electronics' : ''}}
+                            {{package.packageType === 'clothing' ? 'Clothing' : ''}}
+                            {{package.packageType === 'default' ? 'Default' : ''}}
+                        </ion-note>
+                    </ion-col>
+                    <ion-col col-5>
+                        <ion-note>{{package.dimension}}</ion-note>
+                    </ion-col>
+                    <ion-col col-2>
+                        <ion-note>{{package.weight}}</ion-note>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+        <!-- <ion-card-content>
+            <p><span class="label">Pickup Date:</span> {{package.pickupDate | date: 'yyyy-MM-dd hh:mm a'}}</p>
+            <p><span class="label">Pickup Location:</span> {{package.pickupLocation}}</p>
+            <p><span class="label">Destination:</span> {{package.destination}}</p>
+            <p>
+                <span class="label">Package Type:</span>
+                {{package.packageType === 'perishableFood' ? 'Perishable Food' : ''}}
+                {{package.packageType === 'preservedFood' ? 'Preserved Food' : ''}}
+                {{package.packageType === 'document' ? 'Document' : ''}}
+                {{package.packageType === 'electronics' ? 'Electronics' : ''}}
+                {{package.packageType === 'clothing' ? 'Clothing' : ''}}
+                {{package.packageType === 'default' ? 'Default' : ''}}
+        </p>
+            <p>
+                <span class="label">Dimension:</span>
+                {{package.dimension}}
+            </p>
+            <p>
+                <span class="label">Weight:</span>
+                {{package.weight}}
+            </p>
+        </ion-card-content> -->
+    </ion-card>
+</ion-content>

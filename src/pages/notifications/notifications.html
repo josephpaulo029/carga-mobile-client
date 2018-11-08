@@ -14,9 +14,9 @@
         <ion-spinner *ngIf="isLoading"></ion-spinner>
     </div>
     <ion-list *ngIf="!isLoading && notifications.length">
-        <ion-card *ngFor="let notification of notifications">
+        <ion-card *ngFor="let notification of notifications" (click)="visitNotification(notification)">
             <ion-item-sliding #item>
-                <ion-item class="is-unread">
+                <ion-item [ngClass]="{'is-unread': notification.isUnread}">
                     <ion-card-header>
                         <h2 class="card-title">{{notification.title}}</h2>
                     </ion-card-header>
