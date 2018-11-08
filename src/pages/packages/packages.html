@@ -28,13 +28,13 @@
                 <ion-grid>
                     <ion-row>
                         <ion-col text-left>
-                            {{package.custom.pickupLocationAddressString || ''}}
+                            {{package.custom && package.custom.pickupLocationAddressString}}
                         </ion-col>
                         <ion-col text-center>
                             <ion-icon ios="ios-arrow-round-forward" md="md-arrow-round-forward"></ion-icon>
                         </ion-col>
                         <ion-col text-right>
-                            {{package.custom.destinationAddressString || ''}}
+                            {{package.custom && package.custom.destinationAddressString}}
                         </ion-col>
                     </ion-row>
                     <ion-row>
@@ -57,7 +57,7 @@
                             <ion-note>{{package.dimension}}</ion-note>
                         </ion-col>
                         <ion-col col-2>
-                            <ion-note>{{package.weight}}</ion-note>
+                            <ion-note>{{package.weight}} kg</ion-note>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
