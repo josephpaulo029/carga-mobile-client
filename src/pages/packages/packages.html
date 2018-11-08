@@ -10,7 +10,9 @@
 </ion-header>
 
 <ion-content>
-
+    <ion-refresher (ionRefresh)="getWithoutLoading(filter, $event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-item>
         <ion-label>Type</ion-label>
         <ion-select [(ngModel)]="filter.deliveryStatus" (ngModelChange)="getPackages(filter)">
@@ -31,7 +33,7 @@
                             {{package.custom && package.custom.pickupLocationAddressString}}
                         </ion-col>
                         <ion-col text-center>
-                            <ion-icon ios="ios-arrow-round-forward" md="md-arrow-round-forward"></ion-icon>
+                            <ion-icon class="arrow-right" ios="ios-arrow-round-forward" md="md-arrow-round-forward"></ion-icon>
                         </ion-col>
                         <ion-col text-right>
                             {{package.custom && package.custom.destinationAddressString}}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, Events, NavController } from 'ionic-angular';
 import { NotificationService } from '../../providers/notification.api'; 
 import { Storage } from '@ionic/storage';
@@ -8,7 +8,7 @@ import { Storage } from '@ionic/storage';
   selector: 'page-notifications',
   templateUrl: 'notifications.html'
 })
-export class NotificationsPage {
+export class NotificationsPage implements OnInit {
 
   notifications: any = [];
   isLoading: Boolean = false;
@@ -22,8 +22,12 @@ export class NotificationsPage {
       });
   }
 
-  ionViewWillEnter() {
+  ngOnInit() {
     this.getNotifications();
+  }
+
+  ionViewWillEnter() {
+    this.getWithoutLoading();
   }
 
   getNotifications() {
@@ -32,6 +36,18 @@ export class NotificationsPage {
       this.notificationService.getAll(token).subscribe( data => {
         this.isLoading = false;
         this.notifications = data['data'] || [];
+      })
+    });
+  }
+
+  getWithoutLoading(refresher?) {
+    this.storage.get('authToken').then ( token => {
+      this.notificationService.getAll(token).subscribe( data => {
+        this.notifications = data['data'] || [];
+
+        if(refresher) {
+          refresher.complete();
+        }
       })
     });
   }

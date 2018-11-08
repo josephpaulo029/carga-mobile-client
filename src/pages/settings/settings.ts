@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController, IonicPage } from 'ionic-angular';
 import { AccountService } from '../../providers/account.api';
 import { Storage } from '@ionic/storage';
@@ -9,7 +9,7 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'settings.html',
   providers: [AccountService]
 })
-export class SettingsPage {
+export class SettingsPage implements OnInit {
 
     user: any = {};
     isSuccess: Boolean = false;
@@ -20,8 +20,12 @@ export class SettingsPage {
         private storage: Storage) {
     }
 
-    ionViewWillEnter() {
+    ngOnInit() {
         this.getUser();
+    }
+
+    ionViewWillEnter() {
+        this.getWithoutLoading();
     }
 
     getUser() {
@@ -29,6 +33,14 @@ export class SettingsPage {
         this.storage.get('authToken').then( token => {
             this.accountService.get(token).subscribe( data => {
                 this.isLoading = false;
+                this.user = data['data'];
+            });
+        });
+    }
+
+    getWithoutLoading() {
+        this.storage.get('authToken').then( token => {
+            this.accountService.get(token).subscribe( data => {
                 this.user = data['data'];
             });
         });

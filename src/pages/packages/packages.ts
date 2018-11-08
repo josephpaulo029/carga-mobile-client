@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import { DeliveryService } from '../../providers/delivery.api';
 import { Storage } from '@ionic/storage';
@@ -9,7 +9,7 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'packages.html',
   providers: [DeliveryService]
 })
-export class PackagesPage {
+export class PackagesPage implements OnInit {
 
   filter: any = {};
   packages: any = [];
@@ -20,17 +20,33 @@ export class PackagesPage {
     private storage: Storage) {
   }
 
-  ionViewWillEnter() {
+  ngOnInit() {
     this.filter.deliveryStatus = 'pending';
     this.getPackages(this.filter);
   }
 
+  ionViewWillEnter() {
+    this.getWithoutLoading(this.filter);
+  }
+ 
   getPackages(params) {
     this.isLoading = true;
     this.storage.get('authToken').then( token => {
       this.deliveryService.getAll(params, token).subscribe( data => {
         this.isLoading = false;
         this.packages = data['data'];
+      });
+    })
+  }
+
+  getWithoutLoading(params, refresher?) {
+    this.storage.get('authToken').then( token => {
+      this.deliveryService.getAll(params, token).subscribe( data => {
+        this.packages = data['data'];
+
+        if(refresher) {
+          refresher.complete();
+        }
       });
     })
   }
