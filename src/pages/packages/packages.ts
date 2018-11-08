@@ -37,7 +37,7 @@ export class PackagesPage {
 
   visitPackage(delivery) {
     this.navCtrl.push('PackageItemPage', {
-      deliveryId: delivery.id
+      deliveryId: delivery.deliveryId
     });
   }
 

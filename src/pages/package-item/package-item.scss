@@ -1,0 +1,16 @@
+page-package-item {
+    .completed {
+        background-color: green;
+        color: white;
+    }
+
+    .inProgress {
+        background-color: blue;
+        color: white;
+    }
+
+    .pending {
+        background-color: orange;
+        color: white;
+    }
+}

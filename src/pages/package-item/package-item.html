@@ -7,7 +7,10 @@
 </ion-header>
 
 <ion-content>
-    <ion-card>
+    <div text-center margin-top>
+        <ion-spinner *ngIf="isLoading"></ion-spinner>
+    </div>
+    <ion-card *ngIf="!isLoading">
         <ion-card-content>
             <ion-grid>
                 <ion-row>
@@ -46,27 +49,19 @@
                 </ion-row>
             </ion-grid>
         </ion-card-content>
-        <!-- <ion-card-content>
-            <p><span class="label">Pickup Date:</span> {{package.pickupDate | date: 'yyyy-MM-dd hh:mm a'}}</p>
-            <p><span class="label">Pickup Location:</span> {{package.pickupLocation}}</p>
-            <p><span class="label">Destination:</span> {{package.destination}}</p>
-            <p>
-                <span class="label">Package Type:</span>
-                {{package.packageType === 'perishableFood' ? 'Perishable Food' : ''}}
-                {{package.packageType === 'preservedFood' ? 'Preserved Food' : ''}}
-                {{package.packageType === 'document' ? 'Document' : ''}}
-                {{package.packageType === 'electronics' ? 'Electronics' : ''}}
-                {{package.packageType === 'clothing' ? 'Clothing' : ''}}
-                {{package.packageType === 'default' ? 'Default' : ''}}
-        </p>
-            <p>
-                <span class="label">Dimension:</span>
-                {{package.dimension}}
-            </p>
-            <p>
-                <span class="label">Weight:</span>
-                {{package.weight}}
-            </p>
-        </ion-card-content> -->
+        <ion-row>
+            <ion-col text-center [ngClass]="{'completed': package.deliveryStatus == 'completed', 
+                'pending': package.deliveryStatus == 'pending.clientRequest' || package.deliveryStatus == 'pending.ownerAccepted',
+                'inProgress': package.deliveryStatus == 'inProgress.driverAccepted' || package.deliveryStatus == 'inProgress.driverForPickup' || package.deliveryStatus == 'inProgress.driverEnRoute' || package.deliveryStatus == 'inProgress.driverForDropoff'}">
+                <span *ngIf="package.deliveryStatus =='completed'">Package has been delivered</span>
+                <span *ngIf="package.deliveryStatus =='pending.clientRequest'">Client Request</span>
+                <span *ngIf="package.deliveryStatus =='pending.ownerAccepted'">Owner Accepted</span>
+                <span *ngIf="package.deliveryStatus =='inProgress.driverAccepted'">Driver Accepted</span>
+                <span *ngIf="package.deliveryStatus =='inProgress.driverForPickup'">Driver For Pick Up</span>
+                <span *ngIf="package.deliveryStatus =='inProgress.driverEnRoute'">Driver En Route</span>
+                <span *ngIf="package.deliveryStatus =='inProgress.driverForDropoff'">Driver En Route</span>
+            </ion-col>
+        </ion-row>
+
     </ion-card>
 </ion-content>
