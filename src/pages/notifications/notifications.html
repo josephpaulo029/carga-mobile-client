@@ -32,10 +32,20 @@
                         </div>
                     </ion-card-content>
                 </ion-item>
-                <ion-item-options side="right" *ngIf="notification.isUnread">
-                    <button ion-button (click)="$event.stopPropagation(); markAsRead(notification)">
+                <ion-item-options side="right">
+                    <button class="mail-button" ion-button *ngIf="notification.isUnread" (click)="$event.stopPropagation(); mark(notification); item.close()">
                         <ion-icon name="mail-open"></ion-icon>
-                        Mark as read
+                        <div>
+                            Mark 
+                            as read
+                        </div>
+                    </button>
+                    <button class="mail-button" ion-button *ngIf="!notification.isUnread" (click)="$event.stopPropagation(); mark(notification); item.close()">
+                        <ion-icon name="mail"></ion-icon>
+                        <div>
+                            Mark 
+                            as unread
+                        </div>
                     </button>
                 </ion-item-options>
             </ion-item-sliding>

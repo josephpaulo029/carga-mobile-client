@@ -30,8 +30,8 @@ export class NotificationsPage implements OnInit {
     this.getWithoutLoading();
   }
 
-  markAsRead(notification) {
-    notification.isUnread = false;
+  mark(notification) {
+    notification.isUnread = !notification.isUnread;
     this.storage.get('authToken').then( token => {
       this.notificationService.update(notification, token).subscribe( () => {
         this.events.publish('update:notifications');
