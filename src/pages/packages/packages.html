@@ -13,7 +13,10 @@
     <ion-refresher (ionRefresh)="getWithoutLoading(filter, $event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <ion-item>
+    <div text-center margin-top *ngIf="isLoading">
+        <ion-spinner></ion-spinner>
+    </div>
+    <ion-item *ngIf="!isLoading && packages.length">
         <ion-label>Type</ion-label>
         <ion-select [(ngModel)]="filter.deliveryStatus" (ngModelChange)="getPackages(filter)">
             <ion-option value="pending">Pending</ion-option>
@@ -21,8 +24,6 @@
             <ion-option value="completed">Completed</ion-option>
         </ion-select>
     </ion-item>
-
-    <h4 ion-text text-center *ngIf="isLoading">Loading packages</h4>
     <h4 ion-text text-center *ngIf="!isLoading && !packages.length">No packages</h4>
     <ion-list margin-top *ngIf="!isLoading && packages.length">
         <ion-card *ngFor="let package of packages" (click)="visitPackage(package)">
