@@ -21,7 +21,6 @@ export class PackageItemPage {
 
     ionViewWillEnter() {
         this.deliveryId = this.navParams.get('deliveryId');
-        console.log('this', this.deliveryId);
         this.getDelivery();
     }
 

@@ -13,6 +13,9 @@
     <ion-refresher (ionRefresh)="getWithoutLoading($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
+    <div text-center margin-top *ngIf="isLoading">
+        <ion-spinner></ion-spinner>
+    </div>
     <ion-list *ngIf="!isLoading && notifications.length">
         <ion-card *ngFor="let notification of notifications" (click)="visitNotification(notification)">
             <ion-item-sliding #item>

@@ -132,7 +132,7 @@ export class RequestDeliveryPage {
 
     sendRequest(delivery) {
         this.isSaving = true;
-        delivery.ownerId = 'owner12';
+        delivery.ownerId = 'null';
         delivery.driver = 'null';
         delivery.pickupDate = new Date(this.selectedDate + ' ' + this.selectedTime).getTime();
         delivery.deliveryStatus = 'pending.clientRequest';
