@@ -4,7 +4,8 @@ import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth.api';
 import { DeliveryService } from '../../providers/delivery.api';
 import { DatePicker } from '@ionic-native/date-picker';
-import leaflet from 'leaflet';
+import { tileLayer, latLng, marker, icon, polyline } from 'leaflet';
+import { DeviceSocket } from '../../providers/devicesocket.service';
 
 declare var google:any;
 
@@ -12,7 +13,7 @@ declare var google:any;
 @Component({
   selector: 'page-request-delivery',
   templateUrl: 'request-delivery.html',
-  providers: [AuthService, DeliveryService]
+  providers: [AuthService, DeliveryService, DeviceSocket]
 })
 export class RequestDeliveryPage {
     @ViewChild('map-small') mapContainer: ElementRef;
@@ -33,18 +34,55 @@ export class RequestDeliveryPage {
     width: Number;
     height: Number;
 
+    options = {
+        layers: [
+            tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
+        ],
+        zoom: 5,
+        center: latLng(12.8797, 121.7740)
+    };
+
+    layers: any = [];
+
     constructor(private storage: Storage, 
         private datePicker: DatePicker,
         private toast: ToastController,
         private navCtrl: NavController,
+        private deviceSocket: DeviceSocket,
         private modalCtrl: ModalController,
         private deliveryService: DeliveryService,
         private auth: AuthService) {
     }
 
-    ionViewDidEnter() {
+    ngOnInit() {
         this.getUser();
-        this.loadMap();
+        this.initDevices();
+        this.initWebSockets();
+    }
+
+    initDevices() {
+        const username = 'owner12';
+        const deviceId = 'x1002';
+        const topic = '/device/' + username + '/pub/' + deviceId;
+
+        this.deviceSocket.emit('subscribe', {
+            topic: topic
+        });
+    }
+
+    initWebSockets() {
+        this.deviceSocket.on('server-to-client', data => {
+            this.layers = [];
+            let splits = data.payload.split(',');
+
+            let lat = splits[0];
+            let long = splits[1];
+            this.layers.push( marker([ lat, long ], {
+                icon: icon({
+                    iconUrl: 'assets/imgs/marker.png'
+                })
+            }));
+        });
     }
 
     getUser() {
@@ -53,39 +91,7 @@ export class RequestDeliveryPage {
         });
     }
 
-    loadMap() {
-        this.map = leaflet.map("map-small").fitWorld();
-        leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            maxZoom: 10
-        }).addTo(this.map);
-
-        this.map.locate({
-            setView: true,
-            maxZoom: 5
-        }).on('locationfound', (e) => {
-            let markerGroup = leaflet.featureGroup();
-            let marker: any = leaflet.marker([12.8797, 121.7740]).on('click', () => {
-              alert('Marker clicked');
-            })
-            markerGroup.addLayer(marker);
-            this.map.addLayer(markerGroup);
-            }).on('locationerror', (err) => {
-              alert(err.message);
-        })
-    }
-
     visitPage(page) {
-        // if(page == 4) {
-        //     if(!(this.selectedDate && this.selectedTime 
-        //         && this.deliveryObj.pickupLocation && this.deliveryObj.destination 
-        //         && this.deliveryObj.custom.receiverContactNumber && this.deliveryObj.packageType 
-        //         && this.deliveryObj.weight && this.deliveryObj.dimension)) {
-        //             this.errorVisitingPage();
-        //             return;
-        //     }
-        // }
-
         if(page > this.currentPage) {if(this.currentPage == 1) {
             if(page == 2) {
                 if(!(this.selectedDate && this.selectedTime && this.deliveryObj.pickupLocation)) {

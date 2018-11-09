@@ -10,7 +10,14 @@
 </ion-header>
 
 <ion-content>
-    <div id="map-small" style="width:100%; height:35%;" margin-bottom [ngClass]="{'hide': currentPage == 4}"></div>
+    <!-- <div id="map-small" style="width:100%; height:35%;" margin-bottom [ngClass]="{'hide': currentPage == 4}"></div> -->
+    <div class="map-container" margin-bottom [ngClass]="{'hide': currentPage == 4}">
+        <div id="leaflet-div"
+            leaflet 
+            [leafletLayers]="layers"
+            [leafletOptions]="options">
+        </div>
+    </div>
     <form #deliveryForm="ngForm">
         <ion-list *ngIf="currentPage == 1">
             <ion-item (click)="selectDate($event)">

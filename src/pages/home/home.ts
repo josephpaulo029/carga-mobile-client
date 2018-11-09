@@ -1,44 +1,59 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-import leaflet from 'leaflet';
+import { tileLayer, latLng, marker, icon, polyline } from 'leaflet';
+import { DeviceSocket } from '../../providers/devicesocket.service';
 
 @IonicPage()
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+  providers: [DeviceSocket]
 })
 export class HomePage {
     @ViewChild('map') mapContainer: ElementRef;
     map: any;
+    options = {
+        layers: [
+            tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
+        ],
+        zoom: 5,
+        center: latLng(12.8797, 121.7740)
+    };
 
-    constructor(private navCtrl: NavController) {
+    layers: any = [];
+
+    constructor(private navCtrl: NavController, private deviceSocket: DeviceSocket) {
 
     }
 
-    ionViewDidEnter() {
-        this.loadMap();
+    ngOnInit() {
+        this.initDevices();
+        this.initWebSockets();
     }
 
-    loadMap() {
-        this.map = leaflet.map("map").fitWorld();
-        leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attributions: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            maxZoom: 10
-        }).addTo(this.map);
+    initDevices() {
+        const username = 'owner12';
+        const deviceId = 'x1002';
+        const topic = '/device/' + username + '/pub/' + deviceId;
 
-        this.map.locate({
-            setView: true,
-            maxZoom: 5
-        }).on('locationfound', (e) => {
-            let markerGroup = leaflet.featureGroup();
-            let marker: any = leaflet.marker([12.8797, 121.7740]).on('click', () => {
-              alert('Marker clicked');
-            })
-            markerGroup.addLayer(marker);
-            this.map.addLayer(markerGroup);
-            }).on('locationerror', (err) => {
-              alert(err.message);
-        })
+        this.deviceSocket.emit('subscribe', {
+            topic: topic
+        });
+    }
+
+    initWebSockets() {
+        this.deviceSocket.on('server-to-client', data => {
+            this.layers = [];
+            let splits = data.payload.split(',');
+
+            let lat = splits[0];
+            let long = splits[1];
+            this.layers.push( marker([ lat, long ], {
+                icon: icon({
+                    iconUrl: 'assets/imgs/marker.png'
+                })
+            }));
+        });
     }
 
     requestDelivery() {

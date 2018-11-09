@@ -24,11 +24,16 @@
                         <h2 class="card-title">{{notification.title}}</h2>
                     </ion-card-header>
                     <ion-card-content>
-                        {{notification.description}}
+                        <div>
+                            {{notification.description}}
+                        </div>
+                        <div margin-top class="date-text">
+                            {{notification.dateCreated | date : 'LLL dd, yyyy hh:mm a'}}
+                        </div>
                     </ion-card-content>
                 </ion-item>
-                <ion-item-options side="right">
-                    <button ion-button>
+                <ion-item-options side="right" *ngIf="notification.isUnread">
+                    <button ion-button (click)="$event.stopPropagation(); markAsRead(notification)">
                         <ion-icon name="mail-open"></ion-icon>
                         Mark as read
                     </button>

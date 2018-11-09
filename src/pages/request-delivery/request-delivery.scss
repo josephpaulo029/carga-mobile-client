@@ -8,6 +8,15 @@ page-request-delivery {
         padding-left: 0 !important;
     }
 
+    #leaflet-div {
+        height: 100%;
+    }
+
+    .map-container {
+        width: 100%;
+        height: 35%;;
+    }
+
     .list {
         font-size: 14px;
         margin-top: -14px;
