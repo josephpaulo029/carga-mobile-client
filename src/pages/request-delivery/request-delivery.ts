@@ -54,7 +54,7 @@ export class RequestDeliveryPage {
         private auth: AuthService) {
     }
 
-    ngOnInit() {
+    ionViewWillEnter() {
         this.getUser();
         this.initDevices();
         this.initWebSockets();

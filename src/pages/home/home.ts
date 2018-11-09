@@ -26,7 +26,7 @@ export class HomePage {
 
     }
 
-    ngOnInit() {
+    ionViewWillEnter() {
         this.initDevices();
         this.initWebSockets();
     }
