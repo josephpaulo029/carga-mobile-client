@@ -23,4 +23,8 @@ page-notifications {
     .date-text {
         color: #777;
     }
+
+    .has-refresher>.scroll-content {
+        border-top: 0;
+    }
 }

@@ -11,4 +11,8 @@ page-packages {
     .location-text {
         font-weight: bold;
     }
+
+    .has-refresher>.scroll-content {
+        border-top: 0;
+    }
 }
