@@ -14,13 +14,13 @@
         <ion-card-content>
             <ion-grid>
                 <ion-row>
-                    <ion-col text-left>
+                    <ion-col text-left class="location-text">
                         {{package.custom && package.custom.pickupLocationAddressString}}
                     </ion-col>
                     <ion-col text-center>
                         <ion-icon class="arrow-right" ios="ios-arrow-round-forward" md="md-arrow-round-forward"></ion-icon>
                     </ion-col>
-                    <ion-col text-right>
+                    <ion-col text-right class="location-text">
                         {{package.custom && package.custom.destinationAddressString}}
                     </ion-col>
                 </ion-row>
