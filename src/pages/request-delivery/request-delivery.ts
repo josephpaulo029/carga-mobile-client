@@ -6,6 +6,7 @@ import { DeliveryService } from '../../providers/delivery.api';
 import { DatePicker } from '@ionic-native/date-picker';
 import { tileLayer, latLng, marker, icon, polyline } from 'leaflet';
 import { DeviceSocket } from '../../providers/devicesocket.service';
+import { Geolocation } from '@ionic-native/geolocation';
 
 declare var google:any;
 
@@ -16,8 +17,6 @@ declare var google:any;
   providers: [AuthService, DeliveryService, DeviceSocket]
 })
 export class RequestDeliveryPage {
-    @ViewChild('map-small') mapContainer: ElementRef;
-    map: any;
     deliveryObj: any = {
         custom: {}
     };
@@ -38,7 +37,7 @@ export class RequestDeliveryPage {
         layers: [
             tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
         ],
-        zoom: 5,
+        zoom: 6,
         center: latLng(12.8797, 121.7740)
     };
 
@@ -48,6 +47,7 @@ export class RequestDeliveryPage {
         private datePicker: DatePicker,
         private toast: ToastController,
         private navCtrl: NavController,
+        private geolocation: Geolocation,
         private deviceSocket: DeviceSocket,
         private modalCtrl: ModalController,
         private deliveryService: DeliveryService,
@@ -55,9 +55,34 @@ export class RequestDeliveryPage {
     }
 
     ionViewWillEnter() {
+        this.watchMyLocation();
         this.getUser();
         this.initDevices();
         this.initWebSockets();
+    }
+
+    watchMyLocation() {
+        this.geolocation.getCurrentPosition().then( response => {
+            let lat = response.coords.latitude;
+            let long = response.coords.longitude;
+            this.options.center = latLng(lat, long);
+            this.layers[0] = marker([ lat, long ], {
+                icon: icon({
+                    iconUrl: 'assets/imgs/user-marker.png'
+                })
+            });
+        });
+        let watch = this.geolocation.watchPosition();
+        watch.subscribe( data => {
+            let lat = data.coords.latitude;
+            let long = data.coords.longitude;
+            this.options.center = latLng(lat, long);
+            this.layers[0] = marker([ lat, long ], {
+                icon: icon({
+                    iconUrl: 'assets/imgs/user-marker.png'
+                })
+            });
+        });
     }
 
     initDevices() {

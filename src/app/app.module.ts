@@ -8,6 +8,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 import { DatePicker } from '@ionic-native/date-picker';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { MyApp } from './app.component';
 
@@ -30,6 +31,7 @@ import { MyApp } from './app.component';
     SplashScreen,
     DatePicker,
     Geolocation,
+    BackgroundMode,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LocalNotifications
   ]

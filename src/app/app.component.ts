@@ -7,6 +7,7 @@ import { AccountService } from '../providers/account.api';
 import { AuthService } from '../providers/auth.api';
 import { NotificationSocket } from '../providers/notification.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { LoginPage, TabsPage, VerifyClientPage } from '../pages';
 @Component({
@@ -24,6 +25,7 @@ export class MyApp {
     private alert: AlertController,
     private events: Events,
     private auth: AuthService,
+    private backgroundMode: BackgroundMode,
     private localNotification: LocalNotifications,
     private notificationSocket: NotificationSocket,
     private accountService: AccountService,
@@ -67,6 +69,7 @@ export class MyApp {
         // Here you can do any higher level native things you might need.
         this.subscribeNotification();
         this.listenToNotifications();
+        this.backgroundMode.enable();
 
         statusBar.styleDefault();
         splashScreen.hide();

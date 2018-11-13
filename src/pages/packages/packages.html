@@ -24,7 +24,7 @@
             <ion-option value="completed">Completed</ion-option>
         </ion-select>
     </ion-item>
-    <h4 ion-text text-center *ngIf="!isLoading && !packages.length">No packages</h4>
+    <h4 ion-text class="no-packages" text-center *ngIf="!isLoading && !packages.length">No packages</h4>
     <ion-list margin-top *ngIf="!isLoading && packages.length">
         <ion-card *ngFor="let package of packages" (click)="visitPackage(package)">
             <ion-card-content>
