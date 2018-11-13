@@ -16,7 +16,7 @@
     <div text-center margin-top *ngIf="isLoading">
         <ion-spinner></ion-spinner>
     </div>
-    <ion-item *ngIf="!isLoading && packages.length">
+    <ion-item *ngIf="!isLoading">
         <ion-label>Type</ion-label>
         <ion-select [(ngModel)]="filter.deliveryStatus" (ngModelChange)="getPackages(filter)">
             <ion-option value="pending">Pending</ion-option>
