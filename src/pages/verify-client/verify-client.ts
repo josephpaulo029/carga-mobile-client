@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
-import { NavController, IonicPage, ToastController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, IonicPage, ToastController, Events, Nav, MenuController } from 'ionic-angular';
 import { AccountService } from '../../providers/account.api';
 import { UploadService } from '../../providers/upload.api';
 import { Storage } from '@ionic/storage';
+import { NotificationSocket } from '../../providers/notification.service';
 
 @IonicPage()
 @Component({
   selector: 'page-verify-client',
   templateUrl: 'verify-client.html',
-  providers: [AccountService, UploadService]
+  providers: [AccountService, UploadService, NotificationSocket]
 })
 export class VerifyClientPage {
 
@@ -18,8 +19,26 @@ export class VerifyClientPage {
   constructor(private accountService: AccountService, 
     private storage: Storage,
     private navCtrl: NavController,
+    private notificationSocket: NotificationSocket,
+    private events: Events,
+    private menuCtrl: MenuController,
     private toast: ToastController,
     private uploadService: UploadService) {
+
+      this.events.subscribe('notifications', notification => {
+        if(notification['data'].type == 'admin-registration-approved') {
+          this.storage.remove('authToken');
+          this.navCtrl.setRoot('LoginPage');
+          this.notificationSocket.disconnect();
+          this.menuCtrl.enable(false);
+          let toast = this.toast.create({
+            message: 'You account has been approved. You need to login again.',
+            duration: 3000,
+            position: 'bottom'
+          });
+          toast.present();
+        }
+      });
 
   }
 

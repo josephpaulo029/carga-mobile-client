@@ -84,7 +84,7 @@ export class MyApp {
 
   listenToNotifications() {
     this.notificationSocket.on('notification', notification => {
-      this.events.publish('notifications');
+      this.events.publish('notifications', notification);
       this.localNotification.schedule({
         title: 'Carga',
         text: notification['data'].title

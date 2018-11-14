@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth.api';
 import { DeliveryService } from '../../providers/delivery.api';
 import { DatePicker } from '@ionic-native/date-picker';
-import { tileLayer, latLng, marker, icon, polyline } from 'leaflet';
+import { tileLayer, latLng, marker, icon, polyline, Map } from 'leaflet';
 import { DeviceSocket } from '../../providers/devicesocket.service';
 import { Geolocation } from '@ionic-native/geolocation';
 
@@ -55,32 +55,32 @@ export class RequestDeliveryPage {
     }
 
     ionViewWillEnter() {
-        this.watchMyLocation();
         this.getUser();
         this.initDevices();
         this.initWebSockets();
     }
 
-    watchMyLocation() {
+    onMapReady(map: Map) {
         this.geolocation.getCurrentPosition().then( response => {
             let lat = response.coords.latitude;
             let long = response.coords.longitude;
-            this.options.center = latLng(lat, long);
+            
+            map.setView(latLng(lat, long), 13);
             this.layers[0] = marker([ lat, long ], {
                 icon: icon({
                     iconUrl: 'assets/imgs/user-marker.png'
                 })
             });
         });
+        
         let watch = this.geolocation.watchPosition();
         watch.subscribe( data => {
             let lat = data.coords.latitude;
             let long = data.coords.longitude;
-            this.options.center = latLng(lat, long);
             this.layers[0] = marker([ lat, long ], {
                 icon: icon({
                     iconUrl: 'assets/imgs/user-marker.png'
-                })
+                }),
             });
         });
     }
@@ -97,16 +97,15 @@ export class RequestDeliveryPage {
 
     initWebSockets() {
         this.deviceSocket.on('server-to-client', data => {
-            this.layers = [];
             let splits = data.payload.split(',');
 
             let lat = splits[0];
             let long = splits[1];
-            this.layers.push( marker([ lat, long ], {
+            this.layers[1] = marker([ lat, long ], {
                 icon: icon({
                     iconUrl: 'assets/imgs/marker.png'
                 })
-            }));
+            });
         });
     }
 
