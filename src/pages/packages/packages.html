@@ -17,7 +17,10 @@
         <ion-spinner></ion-spinner>
     </div>
     <ion-item *ngIf="!isLoading">
-        <ion-label>Type</ion-label>
+        <ion-label>
+            <ion-icon name="checkbox-outline"></ion-icon>
+            Type
+        </ion-label>
         <ion-select [(ngModel)]="filter.deliveryStatus" (ngModelChange)="getPackages(filter)">
             <ion-option value="pending">Pending</ion-option>
             <ion-option value="inProgress">In Progress</ion-option>
