@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ViewController } from 'ionic-angular';
+import { IonicPage, ViewController, NavParams } from 'ionic-angular';
 
 declare var google: any;
 
@@ -16,8 +16,11 @@ export class SearchAddressPage {
     };
     acService:any;
     placesService: any;
+    isPickUp: Boolean = false;
 
-    constructor(public viewCtrl: ViewController) { 
+    constructor(public viewCtrl: ViewController, private params: NavParams) { 
+        console.log('test', params.get('mode'));
+        if(params.get('mode')) this.isPickUp = true;
     }
 
     ionViewWillEnter() {

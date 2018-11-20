@@ -45,12 +45,16 @@
                     </ion-row>
                     <ion-row>
                         <ion-col text-center>
-                            <ion-note>{{package.pickupDate | date:"MM / dd / yy - h:mm a "}}</ion-note>
+                            <ion-note>
+                                <ion-icon name="calendar" class="package-icon"></ion-icon>
+                                {{package.pickupDate | date:"MM/dd/yy - h:mm a "}}
+                            </ion-note>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col col-5>
                             <ion-note>
+                                <ion-icon name="square" class="package-icon"></ion-icon>
                                 {{package.packageType === 'perishableFood' ? 'Perishable Food' : ''}}
                                 {{package.packageType === 'preservedFood' ? 'Preserved Food' : ''}}
                                 {{package.packageType === 'document' ? 'Document' : ''}}
@@ -60,10 +64,16 @@
                             </ion-note>
                         </ion-col>
                         <ion-col col-5>
-                            <ion-note>{{package.dimension}}</ion-note>
+                            <ion-note>
+                                <ion-icon name="cube" class="package-icon"></ion-icon>
+                                {{package.dimension}}
+                            </ion-note>
                         </ion-col>
                         <ion-col col-2>
-                            <ion-note>{{package.weight}} kg</ion-note>
+                            <ion-note>
+                                <ion-icon name="information-circle" class="package-icon"></ion-icon>
+                                {{package.weight}} kg
+                            </ion-note>
                         </ion-col>
                     </ion-row>
                 </ion-grid>

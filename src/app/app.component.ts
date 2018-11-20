@@ -6,13 +6,14 @@ import { Storage } from '@ionic/storage';
 import { AccountService } from '../providers/account.api';
 import { AuthService } from '../providers/auth.api';
 import { NotificationSocket } from '../providers/notification.service';
+import { DeviceSocket } from '../providers/devicesocket.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { LoginPage, TabsPage, VerifyClientPage } from '../pages';
 @Component({
   templateUrl: 'app.html',
-  providers: [AccountService, NotificationSocket, AuthService]
+  providers: [AccountService, NotificationSocket, DeviceSocket, AuthService]
 })
 export class MyApp {
   rootPage:any = LoginPage;
@@ -27,6 +28,7 @@ export class MyApp {
     private auth: AuthService,
     private backgroundMode: BackgroundMode,
     private localNotification: LocalNotifications,
+    private deviceSocket: DeviceSocket,
     private notificationSocket: NotificationSocket,
     private accountService: AccountService,
     private menuCtrl: MenuController,
@@ -116,6 +118,7 @@ export class MyApp {
             this.storage.remove('authToken');
             this.nav.push('LoginPage');
             this.notificationSocket.disconnect();
+            this.deviceSocket.disconnect();
             this.menuCtrl.enable(false);
           }
         }

@@ -7,6 +7,7 @@ import { DatePicker } from '@ionic-native/date-picker';
 import { tileLayer, latLng, marker, icon, polyline, Map } from 'leaflet';
 import { DeviceSocket } from '../../providers/devicesocket.service';
 import { Geolocation } from '@ionic-native/geolocation';
+import { VehicleService } from '../../providers/vehicle.api';
 
 declare var google:any;
 
@@ -14,7 +15,7 @@ declare var google:any;
 @Component({
   selector: 'page-request-delivery',
   templateUrl: 'request-delivery.html',
-  providers: [AuthService, DeliveryService, DeviceSocket]
+  providers: [AuthService, DeliveryService, VehicleService, DeviceSocket]
 })
 export class RequestDeliveryPage {
     deliveryObj: any = {
@@ -42,6 +43,9 @@ export class RequestDeliveryPage {
     };
 
     layers: any = [];
+    layersCopy: any = [];
+    devices: any = [];
+    vehicles: any = [];
 
     constructor(private storage: Storage, 
         private datePicker: DatePicker,
@@ -51,13 +55,30 @@ export class RequestDeliveryPage {
         private deviceSocket: DeviceSocket,
         private modalCtrl: ModalController,
         private deliveryService: DeliveryService,
+        private vehicleService: VehicleService,
         private auth: AuthService) {
     }
 
     ionViewWillEnter() {
         this.getUser();
-        this.initDevices();
-        this.initWebSockets();
+        this.listenToSocketStatus();
+    }
+
+    listenToSocketStatus() {
+        this.deviceSocket.on('connect', () => {
+            this.getVehicles();
+        });
+    }
+
+    getVehicles() {
+        this.storage.get('authToken').then( token => {
+            this.vehicleService.list({}, token).subscribe( vehicles => {
+                this.vehicles = vehicles['data'] || [];
+
+                this.initWebSockets();
+                this.initDevices();
+            });
+        })
     }
 
     onMapReady(map: Map) {
@@ -86,17 +107,26 @@ export class RequestDeliveryPage {
     }
 
     initDevices() {
-        const username = 'owner12';
-        const deviceId = 'x1002';
-        const topic = '/device/' + username + '/pub/' + deviceId;
+        console.log('devices', this.devices);
+        for(let i = 0; i < this.vehicles.length; i++) {
+            console.log('vehicles', this.vehicles);            
+            this.deviceSocket.emit('subscribe', {
+                topic: '/device/' + this.vehicles[i].pairedDriver.username + '/pub/' + this.vehicles[i].pairedDevice.deviceId
+            });
+            console.log('test','/device/' + this.vehicles[i].pairedDriver.username + '/pub/' + this.vehicles[i].pairedDevice.deviceId );
+        }
+        // const username = 'new.driver.1';
+        // const deviceId = '1234';
+        // const topic = '/device/' + username + '/pub/' + deviceId;
 
-        this.deviceSocket.emit('subscribe', {
-            topic: topic
-        });
+        // this.deviceSocket.emit('subscribe', {
+        //     topic: topic
+        // });
     }
 
     initWebSockets() {
         this.deviceSocket.on('server-to-client', data => {
+            console.log('data', data);
             let splits = data.payload.split(',');
 
             let lat = splits[0];
@@ -106,6 +136,16 @@ export class RequestDeliveryPage {
                     iconUrl: 'assets/imgs/marker.png'
                 })
             });
+
+            for(let index = 1; index <= this.vehicles.length; index++) {
+                this.layers[index] = marker([lat, long], {
+                    icon: icon({
+                        iconUrl: 'assets/imgs/user-marker.png'
+                    })
+                });
+
+                this.layersCopy[index] = this.vehicles[index - 1].pairedDevice.deviceId;
+            }
         });
     }
 
@@ -229,8 +269,8 @@ export class RequestDeliveryPage {
     }
 
     showModal(type) {
-        let modal = this.modalCtrl.create('SearchAddressPage');
         if(type === 'destination') {
+            let modal = this.modalCtrl.create('SearchAddressPage');
             modal.onDidDismiss( data => {
                 if(data){
                     this.selectedDestination = data.description;
@@ -247,6 +287,9 @@ export class RequestDeliveryPage {
     
             modal.present();
         } else {
+            let modal = this.modalCtrl.create('SearchAddressPage', {
+                mode: 'pickup'
+            });
             modal.onDidDismiss( data => {
                 if(data){
                     this.selectedPickup = data.description;

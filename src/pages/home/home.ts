@@ -2,13 +2,15 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import { tileLayer, latLng, marker, icon, polyline, Map } from 'leaflet';
 import { DeviceSocket } from '../../providers/devicesocket.service';
+import { VehicleService } from '../../providers/vehicle.api';
+import { Storage } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [DeviceSocket]
+  providers: [DeviceSocket, VehicleService]
 })
 export class HomePage {
     @ViewChild('map') mapContainer: ElementRef;
@@ -21,26 +23,55 @@ export class HomePage {
         center: latLng(12.8797, 121.7740)
     };
     layers: any = [];
+    layersCopy: any = [];
+    devices: any = [];
+    vehicles: any = [];
 
     constructor(private navCtrl: NavController, 
         private geolocation: Geolocation,
+        private storage: Storage,
+        private vehicleService: VehicleService,
         private deviceSocket: DeviceSocket) {
 
     }
 
     ionViewWillEnter() {
-        this.initDevices();
-        this.initWebSockets();
+        this.listenToSocketStatus();
+    }
+
+    listenToSocketStatus() {
+        this.deviceSocket.on('connect', () => {
+            this.getVehicles();
+        });
+    }
+
+    getVehicles() {
+        this.storage.get('authToken').then( token => {
+            this.vehicleService.list({}, token).subscribe( vehicles => {
+                this.vehicles = vehicles['data'] || [];
+
+                this.initWebSockets();
+                this.initDevices();
+            });
+        })
     }
 
     initDevices() {
-        const username = 'owner12';
-        const deviceId = 'x1002';
-        const topic = '/device/' + username + '/pub/' + deviceId;
+        console.log('devices', this.devices);
+        for(let i = 0; i < this.vehicles.length; i++) {
+            console.log('vehicles', this.vehicles);            
+            this.deviceSocket.emit('subscribe', {
+                topic: '/device/' + this.vehicles[i].pairedDriver.username + '/pub/' + this.vehicles[i].pairedDevice.deviceId
+            });
+            console.log('test','/device/' + this.vehicles[i].pairedDriver.username + '/pub/' + this.vehicles[i].pairedDevice.deviceId );
+        }
+        // const username = 'new.driver.1';
+        // const deviceId = '1234';
+        // const topic = '/device/' + username + '/pub/' + deviceId;
 
-        this.deviceSocket.emit('subscribe', {
-            topic: topic
-        });
+        // this.deviceSocket.emit('subscribe', {
+        //     topic: topic
+        // });
     }
 
     onMapReady(map: Map) {
@@ -63,14 +94,14 @@ export class HomePage {
             this.layers[0] = marker([ lat, long ], {
                 icon: icon({
                     iconUrl: 'assets/imgs/user-marker.png'
-                }),
-                
+                })
             });
         });
     }
 
     initWebSockets() {
         this.deviceSocket.on('server-to-client', data => {
+            console.log('data', data);
             let splits = data.payload.split(',');
 
             let lat = splits[0];
@@ -80,6 +111,16 @@ export class HomePage {
                     iconUrl: 'assets/imgs/marker.png'
                 })
             });
+
+            for(let index = 1; index <= this.vehicles.length; index++) {
+                this.layers[index] = marker([lat, long], {
+                    icon: icon({
+                        iconUrl: 'assets/imgs/user-marker.png'
+                    })
+                });
+
+                this.layersCopy[index] = this.vehicles[index - 1].pairedDevice.deviceId;
+            }
         });
     }
 
