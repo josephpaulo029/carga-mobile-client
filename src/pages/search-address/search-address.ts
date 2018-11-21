@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, ViewController, NavParams } from 'ionic-angular';
+import { Geolocation } from '@ionic-native/geolocation';
 
 declare var google: any;
 
@@ -18,13 +19,42 @@ export class SearchAddressPage {
     placesService: any;
     isPickUp: Boolean = false;
 
-    constructor(public viewCtrl: ViewController, private params: NavParams) { 
+    constructor(public viewCtrl: ViewController, 
+        private geolocation: Geolocation,
+        private params: NavParams) { 
         console.log('test', params.get('mode'));
         if(params.get('mode')) this.isPickUp = true;
     }
 
     ionViewWillEnter() {
         this.acService = new google.maps.places.AutocompleteService();
+
+        // if(this.isPickUp) {
+        //     this.getLocation();
+        // }
+    }
+
+    getLocation() {
+        this.geolocation.getCurrentPosition().then( response => {
+            let lat = response.coords.latitude;
+            let long = response.coords.longitude;
+            console.log('lat', lat);
+            console.log('long', long);
+
+            let latLng = {
+                lat: lat,
+                lng: long
+            };
+            let geocoder = new google.maps.Geocoder;
+
+            geocoder.geocode({location: latLng}, (results, status) => {
+                if(status == 'OK') {
+                    this.autocomplete.query = results[0].formatted_address;
+
+                    this.updateSearch();
+                }
+            })
+        });
     }
 
     dismiss() {

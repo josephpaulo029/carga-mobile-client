@@ -91,6 +91,10 @@ export class MyApp {
         title: 'Carga',
         text: notification['data'].title
       });
+
+      this.localNotification.on('click').subscribe( () => {
+        this.rootPage = 'NotificationsPage';
+      });
     });
   }
 
