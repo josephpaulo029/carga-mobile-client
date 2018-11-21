@@ -22,8 +22,7 @@ export class SearchAddressPage {
     constructor(public viewCtrl: ViewController, 
         private geolocation: Geolocation,
         private params: NavParams) { 
-        console.log('test', params.get('mode'));
-        if(params.get('mode')) this.isPickUp = true;
+            if(params.get('mode')) this.isPickUp = true;
     }
 
     ionViewWillEnter() {
@@ -38,8 +37,6 @@ export class SearchAddressPage {
         this.geolocation.getCurrentPosition().then( response => {
             let lat = response.coords.latitude;
             let long = response.coords.longitude;
-            console.log('lat', lat);
-            console.log('long', long);
 
             let latLng = {
                 lat: lat,

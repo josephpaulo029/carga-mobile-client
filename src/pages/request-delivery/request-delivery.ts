@@ -107,21 +107,11 @@ export class RequestDeliveryPage {
     }
 
     initDevices() {
-        console.log('devices', this.devices);
         for(let i = 0; i < this.vehicles.length; i++) {
-            console.log('vehicles', this.vehicles);            
             this.deviceSocket.emit('subscribe', {
                 topic: '/device/' + this.vehicles[i].pairedDriver.username + '/pub/' + this.vehicles[i].pairedDevice.deviceId
             });
-            console.log('test','/device/' + this.vehicles[i].pairedDriver.username + '/pub/' + this.vehicles[i].pairedDevice.deviceId );
         }
-        // const username = 'new.driver.1';
-        // const deviceId = '1234';
-        // const topic = '/device/' + username + '/pub/' + deviceId;
-
-        // this.deviceSocket.emit('subscribe', {
-        //     topic: topic
-        // });
     }
 
     initWebSockets() {
