@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-import { tileLayer, latLng, marker, icon, polyline, Map } from 'leaflet';
+import { tileLayer, latLng, marker, icon, Map } from 'leaflet';
 import { DeviceSocket } from '../../providers/devicesocket.service';
 import { VehicleService } from '../../providers/vehicle.api';
 import { Storage } from '@ionic/storage';
@@ -20,6 +20,7 @@ export class HomePage {
             tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
         ],
         zoom: 6,
+        attributionControl: false,
         center: latLng(12.8797, 121.7740)
     };
     layers: any = [];
