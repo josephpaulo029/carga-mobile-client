@@ -50,6 +50,18 @@ export class VehicleService {
         return this.http.get(url, {headers});
     }
 
+    getNearby(params, token) {
+        const url = this.url + '/custom-carga/nearby/vehicle';
+
+        const headers = new HttpHeaders({
+            'Content-Type':  'application/json',
+            'Authorization': 'Bearer ' + token,
+            'x-api-key': environment.apiKey
+        });
+
+        return this.http.get(url, {headers, params});
+    }
+
     list(params, token) {
         const url = this.url + '/custom-carga/vehicle';
 

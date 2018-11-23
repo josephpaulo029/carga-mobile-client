@@ -110,7 +110,7 @@ export class RequestDeliveryPage {
     initDevices() {
         for(let i = 0; i < this.vehicles.length; i++) {
             this.deviceSocket.emit('subscribe', {
-                topic: '/device/' + this.vehicles[i].pairedDriver.username + '/pub/' + this.vehicles[i].pairedDevice.deviceId
+                topic: '/device/' + this.vehicles[i].ownerId + '/pub/' + this.vehicles[i].pairedDevice.deviceId
             });
         }
     }

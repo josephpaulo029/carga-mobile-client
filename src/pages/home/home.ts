@@ -14,7 +14,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 })
 export class HomePage {
     @ViewChild('map') mapContainer: ElementRef;
-    map: any;
+    map: Map;
     options = {
         layers: [
             tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
@@ -24,9 +24,11 @@ export class HomePage {
         center: latLng(12.8797, 121.7740)
     };
     layers: any = [];
-    layersCopy: any = [];
+    layersCopy: any = [{}];
     devices: any = [];
     vehicles: any = [];
+    lat: any;
+    lng: any;
 
     constructor(private navCtrl: NavController, 
         private geolocation: Geolocation,
@@ -37,18 +39,11 @@ export class HomePage {
     }
 
     ionViewWillEnter() {
-        this.listenToSocketStatus();
     }
 
-    listenToSocketStatus() {
-        this.deviceSocket.on('connect', () => {
-            this.getVehicles();
-        });
-    }
-
-    getVehicles() {
+    getVehicles(params) {
         this.storage.get('authToken').then( token => {
-            this.vehicleService.list({}, token).subscribe( vehicles => {
+            this.vehicleService.getNearby(params, token).subscribe( vehicles => {
                 this.vehicles = vehicles['data'] || [];
 
                 this.initWebSockets();
@@ -60,29 +55,34 @@ export class HomePage {
     initDevices() {
         for(let i = 0; i < this.vehicles.length; i++) {
             this.deviceSocket.emit('subscribe', {
-                topic: '/device/' + this.vehicles[i].pairedDriver.username + '/pub/' + this.vehicles[i].pairedDevice.deviceId
+                topic: '/device/' + this.vehicles[i].ownerId + '/pub/' + this.vehicles[i].pairedDevice.deviceId
             });
         }
     }
 
     onMapReady(map: Map) {
+        this.map = map
         this.geolocation.getCurrentPosition().then( response => {
-            let lat = response.coords.latitude;
-            let long = response.coords.longitude;
+            this.lat = response.coords.latitude;
+            this.lng = response.coords.longitude;
+
+            // this.storage.set('location', {lat: this.lat, lng: this.lng});
             
-            map.setView(latLng(lat, long), 13);
-            this.layers[0] = marker([ lat, long ], {
+            this.map.setView(latLng(this.lat, this.lng), 13);
+            this.layers[0] = marker([ this.lat, this.lng ], {
                 icon: icon({
                     iconUrl: 'assets/imgs/user-marker.png'
                 })
             });
+
+            this.getVehicles({lat: this.lat, lng: this.lng});
         });
         
         let watch = this.geolocation.watchPosition();
         watch.subscribe( data => {
-            let lat = data.coords.latitude;
-            let long = data.coords.longitude;
-            this.layers[0] = marker([ lat, long ], {
+            this.lat = data.coords.latitude;
+            this.lng = data.coords.longitude;
+            this.layers[0] = marker([ this.lat, this.lng ], {
                 icon: icon({
                     iconUrl: 'assets/imgs/user-marker.png'
                 })
@@ -97,20 +97,26 @@ export class HomePage {
 
             let lat = splits[0];
             let long = splits[1];
-            this.layers[1] = marker([ lat, long ], {
-                icon: icon({
-                    iconUrl: 'assets/imgs/marker.png'
-                })
-            });
 
-            for(let index = 1; index <= this.vehicles.length; index++) {
-                this.layers[index] = marker([lat, long], {
+            let deviceId = data.topic;
+            deviceId = deviceId.split('/');
+            deviceId = deviceId[4];
+
+            let index = this.layersCopy.findIndex( vehicle => vehicle.deviceId == deviceId);
+
+            if(index != -1) {
+                this.layers[index] = marker([ lat, long ], {
                     icon: icon({
-                        iconUrl: 'assets/imgs/user-marker.png'
+                        iconUrl: 'assets/imgs/marker.png'
                     })
                 });
-
-                this.layersCopy[index] = this.vehicles[index - 1].pairedDevice.deviceId;
+            } else {
+                this.layers.push( marker([ lat, long ], {
+                    icon: icon({
+                        iconUrl: 'assets/imgs/marker.png'
+                    })
+                }) );
+                this.layersCopy.push( {deviceId: deviceId});
             }
         });
     }
