@@ -92,7 +92,6 @@ export class HomePage {
 
     initWebSockets() {
         this.deviceSocket.on('server-to-client', data => {
-            console.log('data', data);
             let splits = data.payload.split(',');
 
             let lat = splits[0];

@@ -117,25 +117,30 @@ export class RequestDeliveryPage {
 
     initWebSockets() {
         this.deviceSocket.on('server-to-client', data => {
-            console.log('data', data);
             let splits = data.payload.split(',');
 
             let lat = splits[0];
             let long = splits[1];
-            this.layers[1] = marker([ lat, long ], {
-                icon: icon({
-                    iconUrl: 'assets/imgs/marker.png'
-                })
-            });
 
-            for(let index = 1; index <= this.vehicles.length; index++) {
-                this.layers[index] = marker([lat, long], {
+            let deviceId = data.topic;
+            deviceId = deviceId.split('/');
+            deviceId = deviceId[4];
+
+            let index = this.layersCopy.findIndex( vehicle => vehicle.deviceId == deviceId);
+
+            if(index != -1) {
+                this.layers[index] = marker([ lat, long ], {
                     icon: icon({
-                        iconUrl: 'assets/imgs/user-marker.png'
+                        iconUrl: 'assets/imgs/marker.png'
                     })
                 });
-
-                this.layersCopy[index] = this.vehicles[index - 1].pairedDevice.deviceId;
+            } else {
+                this.layers.push( marker([ lat, long ], {
+                    icon: icon({
+                        iconUrl: 'assets/imgs/marker.png'
+                    })
+                }) );
+                this.layersCopy.push( {deviceId: deviceId});
             }
         });
     }
