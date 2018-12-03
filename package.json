@@ -22,20 +22,21 @@
     "@angular/platform-browser-dynamic": "5.2.11",
     "@asymmetrik/ngx-leaflet": "^2.5.0",
     "@ionic-native/background-mode": "^4.17.0",
-    "@ionic-native/core": "~4.12.0",
     "@ionic-native/date-picker": "^4.16.0",
-    "@ionic-native/geolocation": "^4.17.0",
+    "@ionic-native/geolocation": "^4.18.0",
     "@ionic-native/local-notifications": "^4.17.0",
     "@ionic-native/splash-screen": "~4.12.0",
     "@ionic-native/status-bar": "~4.12.0",
     "@ionic/storage": "2.1.3",
     "@types/leaflet": "^1.2.14",
     "cordova-android": "~7.0.0",
+    "cordova-browser": "~5.0.4",
     "cordova-plugin-background-mode": "^0.7.2",
     "cordova-plugin-badge": "^0.8.7",
     "cordova-plugin-datepicker": "^0.9.3",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-geolocation": "^4.0.1",
+    "cordova-plugin-googlemaps": "^2.4.6",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
     "cordova-plugin-ionic-webview": "^2.2.0",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
@@ -73,10 +74,17 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-datepicker": {},
       "cordova-plugin-local-notification": {},
-      "cordova-plugin-background-mode": {}
+      "cordova-plugin-background-mode": {},
+      "cordova-plugin-googlemaps": {
+        "API_KEY_FOR_ANDROID": "AIzaSyDCr2eITX_L3YIhCL-6etbhxdrKIpNLX1I",
+        "API_KEY_FOR_IOS": "AIzaSyAmrM8n0B8r67-DWJyjtCW6LcfaXOVP1ko",
+        "PLAY_SERVICES_VERSION": "15.0.1",
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      }
     },
     "platforms": [
-      "android"
+      "android",
+      "browser"
     ]
   }
 }

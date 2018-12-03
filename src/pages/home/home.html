@@ -10,13 +10,7 @@
 </ion-header>
 
 <ion-content>
-    <div class="map-container" margin-bottom [ngClass]="{'hide': currentPage == 4}">
-        <div id="leaflet-div"
-            leaflet 
-            (leafletMapReady)="onMapReady($event)"
-            [leafletLayers]="layers"
-            [leafletOptions]="options">
-        </div>
+    <div #map id="map">
     </div>
 
     <div text-center>
