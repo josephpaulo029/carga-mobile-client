@@ -28,4 +28,19 @@ page-packages {
     .label-md {
         color: #D54A44 !important;
     }
+
+    .completed {
+        background-color: green;
+        color: white;
+    }
+
+    .inProgress {
+        background-color: #2980b9;
+        color: white;
+    }
+
+    .pending {
+        background-color: orange;
+        color: white;
+    }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ViewController, NavParams } from 'ionic-angular';
+import { IonicPage, ViewController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 declare var google: any;
@@ -18,9 +18,12 @@ export class SearchAddressPage {
     acService:any;
     placesService: any;
     isPickUp: Boolean = false;
+    loading: any;
 
     constructor(public viewCtrl: ViewController, 
         private geolocation: Geolocation,
+        private alertCtrl: AlertController,
+        private loadingCtrl: LoadingController,
         private params: NavParams) { 
             if(params.get('mode')) this.isPickUp = true;
     }
@@ -28,9 +31,32 @@ export class SearchAddressPage {
     ionViewWillEnter() {
         this.acService = new google.maps.places.AutocompleteService();
 
-        // if(this.isPickUp) {
-        //     this.getLocation();
-        // }
+        if(this.isPickUp) {
+            let alert = this.alertCtrl.create({
+                title: 'Use current location?',
+                message: 'Do you want to use your current location for pick up?',
+                buttons: [
+                    {
+                        text: 'Cancel',
+                        role: 'cancel',
+                        handler: () => {
+
+                        }
+                    },
+                    {
+                        text: 'Ok',
+                        handler: () => {
+                            this.loading = this.loadingCtrl.create({
+                                content: 'Please wait...'
+                            });
+                            this.loading.present();
+                            this.getLocation();
+                        }
+                    }
+                ]
+            });
+            alert.present();
+        }
     }
 
     getLocation() {
@@ -47,8 +73,10 @@ export class SearchAddressPage {
             geocoder.geocode({location: latLng}, (results, status) => {
                 if(status == 'OK') {
                     this.autocomplete.query = results[0].formatted_address;
-
-                    this.updateSearch();
+                    this.loading.dismiss();
+                    this.viewCtrl.dismiss({
+                        description: this.autocomplete.query
+                    });
                 }
             })
         });

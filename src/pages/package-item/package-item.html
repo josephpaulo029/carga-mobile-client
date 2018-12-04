@@ -56,7 +56,7 @@
                 'pending': package.deliveryStatus == 'pending.clientRequest' || package.deliveryStatus == 'pending.ownerAccepted',
                 'inProgress': package.deliveryStatus == 'inProgress.driverAccepted' || package.deliveryStatus == 'inProgress.driverForPickup' || package.deliveryStatus == 'inProgress.driverEnRoute' || package.deliveryStatus == 'inProgress.driverForDropoff'}">
                 <span *ngIf="package.deliveryStatus =='completed'">Package has been delivered</span>
-                <span *ngIf="package.deliveryStatus =='pending.clientRequest'">Waiting for an owner to accept your request</span>
+                <span *ngIf="package.deliveryStatus =='pending.clientRequest'">Waiting for a driver to accept your request</span>
                 <span *ngIf="package.deliveryStatus =='pending.ownerAccepted'">Owner has accepted your request. Waiting for driver confirmation.</span>
                 <span *ngIf="package.deliveryStatus =='inProgress.driverAccepted'">Driver has accepted your request.</span>
                 <span *ngIf="package.deliveryStatus =='inProgress.driverForPickup'">Driver will pick up your package</span>

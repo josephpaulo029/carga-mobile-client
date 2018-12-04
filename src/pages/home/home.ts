@@ -35,10 +35,42 @@ export class HomePage {
         private googleMaps: GoogleMaps,
         private vehicleService: VehicleService,
         private deviceSocket: DeviceSocket) {
-
     }
 
     ionViewDidLoad() {
+        this.storage.get('currentLocation').then( value => {
+            if(value) {
+                this.map = GoogleMaps.create('map', {
+                    camera: {
+                        target: {
+                            lat: value.lat,
+                            lng: value.lng
+                        },
+                        zoom: 5
+                    }
+                });
+            } else {
+                this.map = GoogleMaps.create('map', {
+                    camera: {
+                        target: {
+                            lat: 12.8797,
+                            lng: 121.7740
+                        },
+                        zoom: 5
+                    }
+                });
+            }
+        }).catch( () => {
+            this.map = GoogleMaps.create('map', {
+                camera: {
+                    target: {
+                        lat: 12.8797,
+                        lng: 121.7740
+                    },
+                    zoom: 5
+                }
+            });
+        });
         this.listenToSocketStatus();
     }
 
@@ -49,18 +81,14 @@ export class HomePage {
     }
 
     loadMap() {
-        this.map = GoogleMaps.create('map', {
-            camera: {
-                target: {
-                  lat: 12.8797,
-                  lng: 121.7740
-                },
-                zoom: 5
-            }
-        });
         this.geolocation.getCurrentPosition().then( response => {
             this.lat = response.coords.latitude;
             this.lng = response.coords.longitude;
+
+            this.storage.set('currentLocation', {
+                lat: this.lat,
+                lng: this.lng
+            });
 
             let coordinates: LatLng = new LatLng(this.lat, this.lng);
             this.map.setCameraTarget(coordinates);
@@ -80,6 +108,11 @@ export class HomePage {
         watch.subscribe( data => {
             this.lat = data.coords.latitude;
             this.lng = data.coords.longitude;
+
+            this.storage.set('currentLocation', {
+                lat: this.lat,
+                lng: this.lng
+            });
 
             this.markers[0].setPosition({
                 lat: this.lat,

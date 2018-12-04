@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
     endpoint: 'https://apistg.cognity.io/v1',
-    socketUrl: 'http://54.169.234.1:8083',
+    socketUrl: 'https://cognity-bridge-websockets-stg.herokuapp.com',
     apiKey: 'carga-api-key-stg-123'
 };
