@@ -116,6 +116,20 @@ export class RequestDeliveryPage {
             this.vehicleService.getNearby(params, token).subscribe( vehicles => {
                 this.vehicles = vehicles['data'] || [];
 
+                this.vehicles.map( vehicle => {
+                    if(vehicle.currentGPSLocation.latitude && vehicle.currentGPSLocation.longitude) {
+                        let marker = this.map.addMarkerSync({
+                            icon: 'assets/imgs/marker.png',
+                            position: {
+                                lat: vehicle.currentGPSLocation.latitude,
+                                lng: vehicle.currentGPSLocation.longitude
+                            }
+                        });
+                        this.markers.push(marker);
+                        this.markersCopy.push( {deviceId: vehicle.pairedDevice.deviceId});
+                    }
+                });
+
                 this.initWebSockets();
                 this.initDevices();
             });
