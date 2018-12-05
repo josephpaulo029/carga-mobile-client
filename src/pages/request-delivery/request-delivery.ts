@@ -131,6 +131,11 @@ export class RequestDeliveryPage {
 
             if(this.isEmptyObject(this.markers[0])) {
                 this.setLocationMarker(coordinates);
+            } else {
+                this.markers[0].setPosition({
+                    lat: this.lat,
+                    lng: this.lng
+                });
             }
         });
     }

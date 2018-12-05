@@ -9,6 +9,7 @@ import { NotificationSocket } from '../providers/notification.service';
 import { DeviceSocket } from '../providers/devicesocket.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { LoginPage, TabsPage, VerifyClientPage } from '../pages';
 @Component({
@@ -29,6 +30,7 @@ export class MyApp {
     private backgroundMode: BackgroundMode,
     private localNotification: LocalNotifications,
     private deviceSocket: DeviceSocket,
+    private geolocation: Geolocation,
     private notificationSocket: NotificationSocket,
     private accountService: AccountService,
     private menuCtrl: MenuController,
@@ -75,6 +77,7 @@ export class MyApp {
 
         statusBar.styleDefault();
         splashScreen.hide();
+        this.getLocation();
       });
   }
 
@@ -94,6 +97,18 @@ export class MyApp {
 
       this.localNotification.on('click').subscribe( () => {
         this.rootPage = 'NotificationsPage';
+      });
+    });
+  }
+
+  getLocation() {
+    this.geolocation.getCurrentPosition().then( response => {
+      let lat = response.coords.latitude;
+      let lng = response.coords.longitude;
+
+      this.storage.set('currentLocation', {
+          lat: lat,
+          lng: lng
       });
     });
   }

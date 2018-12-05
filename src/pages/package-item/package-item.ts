@@ -48,6 +48,16 @@ export class PackageItemPage {
                         zoom: 5
                     }
                 });
+
+                let coordinates: LatLng = new LatLng(value.lat, value.lng);
+                if(this.isEmptyObject(this.markers[0])) {
+                    this.setLocationMarker(coordinates);
+                } else {
+                    this.markers[0].setPosition({
+                        lat: value.lat,
+                        lng: value.lng
+                    });
+                }
             } else {
                 this.map = GoogleMaps.create('map', {
                     camera: {
@@ -82,29 +92,53 @@ export class PackageItemPage {
 
                 this.loadMap();
 
-                let index = this.markersCopy.findIndex( vehicle => vehicle.deviceId == this.package.vehicleInfo.pairedDevice.deviceId);
+                if(!(this.package.deliveryStatus == 'pending.clientRequest' || this.package.deliveryStatus == 'pending.ownerAccepted' || this.package.deliveryStatus == 'completed')) {
+                    let index = this.markersCopy.findIndex( vehicle => vehicle.deviceId == this.package.vehicleInfo.pairedDevice.deviceId);
 
-                if(index != -1) {
-                    this.markers[1].setPosition({
-                        lat: this.package.vehicleInfo.currentGPSLocation.latitude,
-                        lng: this.package.vehicleInfo.currentGPSLocation.longitude
-                    });
-                } else {
-                    let marker = this.map.addMarkerSync({
-                        icon: 'assets/imgs/marker.png',
-                        position: {
+                    if(index != -1) {
+                        this.markers[1].setPosition({
                             lat: this.package.vehicleInfo.currentGPSLocation.latitude,
                             lng: this.package.vehicleInfo.currentGPSLocation.longitude
-                        }
-                    });
-                    this.markers[1] = marker;
-                    this.markersCopy[1] = {deviceId: this.package.vehicleInfo.pairedDevice.deviceId};
+                        });
+                    } else {
+                        let marker = this.map.addMarkerSync({
+                            icon: 'assets/imgs/marker.png',
+                            position: {
+                                lat: this.package.vehicleInfo.currentGPSLocation.latitude,
+                                lng: this.package.vehicleInfo.currentGPSLocation.longitude
+                            }
+                        });
+                        this.markers[1] = marker;
+                        this.markersCopy[1] = {deviceId: this.package.vehicleInfo.pairedDevice.deviceId};
+                    }
+                    let coordinates: LatLng = new LatLng(this.package.vehicleInfo.currentGPSLocation.latitude, this.package.vehicleInfo.currentGPSLocation.longitude);
+                    this.map.setCameraTarget(coordinates);
+                    this.map.setCameraZoom(13);
+    
+                    this.initDevices();
+                    this.initWebSockets();
                 }
-                let coordinates: LatLng = new LatLng(this.package.vehicleInfo.currentGPSLocation.latitude, this.package.vehicleInfo.currentGPSLocation.longitude);
-                this.map.setCameraTarget(coordinates);
-                this.map.setCameraZoom(13);
             });
         });
+    }
+
+    isEmptyObject(obj) {
+        for(var key in obj) {
+            if(obj.hasOwnProperty(key))
+                return false;
+        }
+        return true;
+    }
+
+    setLocationMarker(coordinates) {
+        let marker = this.map.addMarkerSync({
+            icon: 'assets/imgs/user-marker.png',
+            position: {
+                lat: coordinates.lat,
+                lng: coordinates.lng
+            }
+        });
+        this.markers[0] = marker;
     }
 
     loadMap() {
@@ -118,18 +152,20 @@ export class PackageItemPage {
             });
 
             let coordinates: LatLng = new LatLng(this.lat, this.lng);
-            
-            let marker = this.map.addMarkerSync({
-                icon: 'assets/imgs/user-marker.png',
-                position: {
+
+            if(this.isEmptyObject(this.markers[0])) {
+                this.setLocationMarker(coordinates);
+            } else {
+                this.markers[0].setPosition({
                     lat: this.lat,
                     lng: this.lng
-                }
-            });
-            this.markers[0] = marker;
+                });
+            }
 
-            this.initDevices();
-            this.initWebSockets();
+            if(this.package.deliveryStatus == 'pending.clientRequest' || this.package.deliveryStatus == 'pending.ownerAccepted' || this.package.deliveryStatus == 'completed') {
+                this.map.setCameraTarget(coordinates);
+                this.map.setCameraZoom(13);
+            }
         });
 
         let watch = this.geolocation.watchPosition();
