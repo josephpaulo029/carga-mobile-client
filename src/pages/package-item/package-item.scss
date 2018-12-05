@@ -23,12 +23,17 @@ page-package-item {
         color: #666 !important;
     }
 
-    .package-icon {
-        width: 20px;
-        color: #D54A44;
-    }
-
     .location-text {
         font-weight: bold;
+    }
+
+    #map {
+        height: 100%;
+    }
+
+    ion-card {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 0 !important;
     }
 }
