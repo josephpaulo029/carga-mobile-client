@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ViewController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, ViewController, NavParams, AlertController, LoadingController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 declare var google: any;
@@ -23,6 +23,7 @@ export class SearchAddressPage {
     constructor(public viewCtrl: ViewController, 
         private geolocation: Geolocation,
         private alertCtrl: AlertController,
+        private toast: ToastController,
         private loadingCtrl: LoadingController,
         private params: NavParams) { 
             if(params.get('mode')) this.isPickUp = true;
@@ -47,7 +48,8 @@ export class SearchAddressPage {
                         text: 'Ok',
                         handler: () => {
                             this.loading = this.loadingCtrl.create({
-                                content: 'Please wait...'
+                                content: 'Please wait...',
+                                enableBackdropDismiss: true
                             });
                             this.loading.present();
                             this.getLocation();
@@ -77,8 +79,16 @@ export class SearchAddressPage {
                     this.viewCtrl.dismiss({
                         description: this.autocomplete.query
                     });
+                } else {
+                    let toast = this.toast.create({
+                        message: 'Error fetching location. Please try again.',
+                        duration: 3000,
+                        position: 'bottom'
+                    });
+                    toast.present();
+                    this.loading.dismiss();
                 }
-            })
+            });
         });
     }
 
