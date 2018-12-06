@@ -1,6 +1,9 @@
 page-settings {
     .user-avatar {
         width: 100%;
+        height: calc(100% - 44px);
+        object-fit: cover;
+        margin-bottom: 0 !important;
     }
 
     .check-circle {
@@ -26,5 +29,18 @@ page-settings {
     .item {
         background: #fff;
         color: #000;
+    }
+
+    .scroll-content {
+        margin-top: 55px !important;
+    }
+
+    .image-container {
+        height: calc(100% - 212px);
+    }
+
+    .icon-camera {
+        margin-right: 7px;
+        margin-top: -2px;
     }
 }

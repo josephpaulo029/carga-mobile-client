@@ -13,11 +13,12 @@
     <div text-center margin-top *ngIf="isLoading">
         <ion-spinner></ion-spinner>
     </div>
-    <div text-center *ngIf="!isLoading">
+    <div class="image-container">
         <img *ngIf="user.avatar !== 'null'" class="user-avatar" [src]="user.avatar" margin-bottom/>
         <img *ngIf="user.avatar === 'null'" class="user-avatar" src="assets/imgs/default-user.png" margin-bottom>
-        <div class="image-upload">
+        <div class="image-upload" text-center>
             <button ion-button>
+                <ion-icon name="camera" class="icon-camera"></ion-icon>
                 Upload
             <input type="file" id="upload"
             (change)="fileChangeEvent($event)" 
