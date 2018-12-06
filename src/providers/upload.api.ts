@@ -14,7 +14,8 @@ export class UploadService {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type':  'application/x-www-form-urlencoded',
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + token,
+                'x-api-key': environment.apiKey
             })
         };
 

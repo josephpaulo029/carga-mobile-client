@@ -16,7 +16,8 @@ export class AuthService {
     login(data: any) {
         const httpOptions = {
             headers: new HttpHeaders({
-                'Content-Type':  'application/json'
+                'Content-Type':  'application/json',
+                'x-api-key': environment.apiKey
             })
         };
 
