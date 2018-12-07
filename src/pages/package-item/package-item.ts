@@ -92,7 +92,10 @@ export class PackageItemPage {
 
                 this.loadMap();
 
-                if(!(this.package.deliveryStatus == 'pending.clientRequest' || this.package.deliveryStatus == 'pending.ownerAccepted' || this.package.deliveryStatus == 'completed')) {
+                if(this.package.deliveryStatus == 'inProgress.driverAccepted' || 
+                    this.package.deliveryStatus == 'inProgress.driverForPickup' || 
+                    this.package.deliveryStatus == 'inProgress.driverEnRoute' ||
+                    this.package.deliveryStatus == 'inProgress.driverForDropoff') {
                     let index = this.markersCopy.findIndex( vehicle => vehicle.deviceId == this.package.vehicleInfo.pairedDevice.deviceId);
 
                     if(index != -1) {
@@ -117,6 +120,42 @@ export class PackageItemPage {
     
                     this.initDevices();
                     this.initWebSockets();
+                } else if(this.package.deliveryStatus == 'completed') {
+                    console.log('package', this.package);
+                    let destinationLatLng = this.package.destination.split(',');
+                    let pickupLatLng = this.package.pickupLocation.split(',');
+
+                    this.markers[0].setPosition({
+                        lat: pickupLatLng[0],
+                        lng: pickupLatLng[1]
+                    });
+
+                    let marker = this.map.addMarkerSync({
+                        icon: 'assets/imgs/user-marker.png',
+                        position: {
+                            lat: destinationLatLng[0],
+                            lng: destinationLatLng[1]
+                        }
+                    });
+                    this.markers[1] = marker;
+
+                    let points = [
+                        {
+                            lat: pickupLatLng[0],
+                            lng: pickupLatLng[1]
+                        },
+                        {
+                            lat: destinationLatLng[0],
+                            lng: destinationLatLng[1]
+                        }
+                    ];
+
+                    this.map.addPolylineSync({
+                        points: points,
+                        color : '#1B747D',
+                        width: 8,
+                        geodesic: true
+                    });
                 }
             });
         });
@@ -142,47 +181,54 @@ export class PackageItemPage {
     }
 
     loadMap() {
-        this.geolocation.getCurrentPosition().then( response => {
-            this.lat = response.coords.latitude;
-            this.lng = response.coords.longitude;
+        if(this.package.deliveryStatus != 'completed') {
+            this.geolocation.getCurrentPosition().then( response => {
+                this.lat = response.coords.latitude;
+                this.lng = response.coords.longitude;
 
-            this.storage.set('currentLocation', {
-                lat: this.lat,
-                lng: this.lng
+                this.storage.set('currentLocation', {
+                    lat: this.lat,
+                    lng: this.lng
+                });
+
+                let coordinates: LatLng = new LatLng(this.lat, this.lng);
+
+                if(this.isEmptyObject(this.markers[0])) {
+                    this.setLocationMarker(coordinates);
+                } else {
+                    this.markers[0].setPosition({
+                        lat: this.lat,
+                        lng: this.lng
+                    });
+                }
+
+                if(this.package.deliveryStatus == 'pending.clientRequest' || this.package.deliveryStatus == 'pending.ownerAccepted') {
+                    this.map.setCameraTarget(coordinates);
+                    this.map.setCameraZoom(13);
+                }
             });
 
-            let coordinates: LatLng = new LatLng(this.lat, this.lng);
+            let watch = this.geolocation.watchPosition();
+            watch.subscribe( data => {
+                this.lat = data.coords.latitude;
+                this.lng = data.coords.longitude;
 
-            if(this.isEmptyObject(this.markers[0])) {
-                this.setLocationMarker(coordinates);
-            } else {
+                this.storage.set('currentLocation', {
+                    lat: this.lat,
+                    lng: this.lng
+                });
+
                 this.markers[0].setPosition({
                     lat: this.lat,
                     lng: this.lng
                 });
-            }
-
-            if(this.package.deliveryStatus == 'pending.clientRequest' || this.package.deliveryStatus == 'pending.ownerAccepted' || this.package.deliveryStatus == 'completed') {
-                this.map.setCameraTarget(coordinates);
-                this.map.setCameraZoom(13);
-            }
-        });
-
-        let watch = this.geolocation.watchPosition();
-        watch.subscribe( data => {
-            this.lat = data.coords.latitude;
-            this.lng = data.coords.longitude;
-
-            this.storage.set('currentLocation', {
-                lat: this.lat,
-                lng: this.lng
             });
-
-            this.markers[0].setPosition({
-                lat: this.lat,
-                lng: this.lng
-            });
-        });
+        } else if(this.package.deliveryStatus == 'completed') {
+            let pickupLocation = this.package.pickupLocation.split(',');
+            let pickupCoordinates: LatLng = new LatLng(pickupLocation[0], pickupLocation[1]);
+            this.map.setCameraTarget(pickupCoordinates);
+            this.map.setCameraZoom(13);
+        }
     }
 
     initDevices() {
