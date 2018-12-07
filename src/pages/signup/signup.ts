@@ -14,6 +14,11 @@ export class SignupPage {
         custom: {}
     };
     isLoading: Boolean = false;
+    isError: Boolean = false;
+    errorMessages: any = {
+        email: '',
+        confirmPassword: ''
+    };
 
     constructor(public navCtrl: NavController, 
         private toast: ToastController,
@@ -50,6 +55,44 @@ export class SignupPage {
         }, err => {
             this.isLoading = false;
         });
+    }
+
+    validateEmail(event) {
+        let email = event.target.value;
+        if(!email) {
+            this.errorMessages.email = '';
+            this.isError = false;
+            return;
+        }
+    
+        let regex= /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let isValid = regex.test(String(email).toLowerCase());
+    
+        if(!isValid) {
+          this.errorMessages.email = 'Invalid email';
+          this.isError = true;
+        } else {
+          this.errorMessages.email = '';
+          this.isError = false;
+        }
+    }
+
+    validateConfirmPassword(event) {
+        let confirmPass = event.target.value;
+
+        if(!confirmPass) {
+            this.errorMessages.confirmPassword = '';
+            this.isError = false;
+            return;
+        }
+    
+        if(confirmPass != this.user.password) {
+          this.errorMessages.confirmPassword = 'Passwords do not match';
+          this.isError = true;
+        } else {
+          this.errorMessages.confirmPassword = '';
+          this.isError = false;
+        }
     }
 
 }

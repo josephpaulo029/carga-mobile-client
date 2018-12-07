@@ -18,8 +18,9 @@
                         </ion-item>
 
                         <ion-item>
-                            <ion-input type="email" placeholder="Email" name="email" [(ngModel)]="user.email" required></ion-input>
+                            <ion-input type="email" (keyup)="validateEmail($event)" placeholder="Email" name="email" [(ngModel)]="user.email" required></ion-input>
                         </ion-item>
+                        <ion-label *ngIf="errorMessages.email" class="error-text">{{errorMessages.email}}</ion-label>
 
                         <ion-item>
                             <ion-input type="contact" placeholder="Contact No" name="contact" [(ngModel)]="user.custom.contactNumber" required></ion-input>
@@ -34,15 +35,16 @@
                         </ion-item>
 
                         <ion-item>
-                            <ion-input type="password" placeholder="Confirm Password" name="confirmpassword" [(ngModel)]="user.confirmPassword" required></ion-input>
+                            <ion-input type="password" (keyup)="validateConfirmPassword($event)" placeholder="Confirm Password" name="confirmpassword" [(ngModel)]="user.confirmPassword" required></ion-input>
                         </ion-item>
+                        <ion-label *ngIf="errorMessages.confirmPassword" class="error-text">{{errorMessages.confirmPassword}}</ion-label>
                     </ion-list>
                 </ion-col>
             </ion-row>
             
             <ion-row>
                 <ion-col class="signup-col">
-                    <button ion-button class="submit-btn" full type="submit" [disabled]="!signUpForm.valid || isLoading">Signup</button>
+                    <button ion-button class="submit-btn" full type="submit" [disabled]="!signUpForm.valid || isLoading || isError">Signup</button>
                     <button ion-button class="register-btn" type="button" block clear (click)="login()">Already have an account? Login here</button>
                 </ion-col>
             </ion-row>

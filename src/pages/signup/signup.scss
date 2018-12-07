@@ -1,4 +1,9 @@
 page-signup {
+
+    .error-text {
+        text-align: left;
+        color: #F1A445;
+    }
  
     .signup-content {
         background: color($colors, primary);
