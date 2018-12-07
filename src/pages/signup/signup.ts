@@ -11,7 +11,9 @@ import { AccountService } from '../../providers/account.api';
 export class SignupPage {
 
     user: any = {
-        custom: {}
+        custom: {
+            rejectionReason: 'null'
+        }
     };
     isLoading: Boolean = false;
     isError: Boolean = false;

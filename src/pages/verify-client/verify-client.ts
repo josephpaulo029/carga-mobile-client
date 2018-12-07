@@ -37,6 +37,8 @@ export class VerifyClientPage {
             position: 'bottom'
           });
           toast.present();
+        } else if(notification['data'].type == 'admin-registration-rejected') {
+          this.getUser();
         }
       });
 
