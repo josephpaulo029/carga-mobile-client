@@ -31,4 +31,15 @@ export class AuthService {
             return null;
         }
     }
+
+    forgotPassword(data) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type':  'application/json',
+                'x-api-key': environment.apiKey
+            })
+        };
+
+        return this.http.post(this.url + '/account/forgot-password', JSON.stringify(data), httpOptions);
+    }
 }

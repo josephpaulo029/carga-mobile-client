@@ -1,10 +1,9 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, ToastController, NavController, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth.api';
 import { DeliveryService } from '../../providers/delivery.api';
 import { DatePicker } from '@ionic-native/date-picker';
-import { tileLayer, latLng, marker, icon, polyline, Map } from 'leaflet';
 import { DeviceSocket } from '../../providers/devicesocket.service';
 import { Geolocation } from '@ionic-native/geolocation';
 import { VehicleService } from '../../providers/vehicle.api';

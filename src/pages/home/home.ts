@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-import { tileLayer, latLng, marker, icon, Map } from 'leaflet';
 import { DeviceSocket } from '../../providers/devicesocket.service';
 import { VehicleService } from '../../providers/vehicle.api';
 import { Storage } from '@ionic/storage';
@@ -9,8 +8,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import {
     GoogleMaps,
     GoogleMap,
-    LatLng,
-    LatLngBounds
+    LatLng
 } from '@ionic-native/google-maps';
 
 @IonicPage()
@@ -32,7 +30,6 @@ export class HomePage {
     constructor(private navCtrl: NavController, 
         private geolocation: Geolocation,
         private storage: Storage,
-        private googleMaps: GoogleMaps,
         private vehicleService: VehicleService,
         private deviceSocket: DeviceSocket) {
     }
