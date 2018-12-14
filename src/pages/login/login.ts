@@ -31,7 +31,18 @@ export class LoginPage {
                 this.isLoading = false;
                 let userObj = this.authService.decodeToken(data['response']);
 
-                if(userObj.validationStatus === 'pending') {
+                if(userObj.type != 'client') {
+                    let toast = this.toast.create({
+                        message: 'Invalid credentials',
+                        duration: 3000,
+                        position: 'bottom'
+                    });
+                    toast.present();
+                    this.isLoading = false;
+                    return;
+                }
+
+                if(userObj.validationStatus === 'pending' || userObj.validationStatus === 'rejected') {
                     this.navCtrl.setRoot('VerifyClientPage');
                 } else {
                     this.navCtrl.push('TabsPage');

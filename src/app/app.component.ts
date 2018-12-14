@@ -54,7 +54,7 @@ export class MyApp {
       this.storage.get('authToken').then ( value => {
         if(value) {
           let userObj = this.auth.decodeToken(value);
-          if(userObj.validationStatus === 'pending') {
+          if(userObj.validationStatus === 'pending' || userObj.validationStatus === 'rejected') {
             this.rootPage = VerifyClientPage;
           } else {
             this.rootPage = TabsPage;
