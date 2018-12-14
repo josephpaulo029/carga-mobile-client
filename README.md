@@ -14,5 +14,7 @@ Deployment
 <!-- 1. change environment.prod.ts to environment.ts -->
 2. Change config.xml version
 3. ionic cordova build android --release
-4. jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore .\carga.keystore .\app-release-unsigned.apk carga
-5. zipalign -v 4 .\app-release-unsigned.apk carga.apk
+<!-- Not necessary when you already have .keystore file -->
+4. keytool -genkey -v -keystore carga.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
+5. jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore .\carga.keystore .\app-release-unsigned.apk carga
+6. zipalign -v 4 .\app-release-unsigned.apk carga.apk
