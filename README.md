@@ -11,7 +11,7 @@ Quick Start
 
 Deployment
 
-<!-- 1. change environment.prod.ts to environment.ts -->
+1. change _environment.prod.ts to environment.ts
 2. Change config.xml version
 3. ionic cordova build android --release
 <!-- Not necessary when you already have .keystore file -->
