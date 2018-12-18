@@ -136,6 +136,9 @@ export class RequestDeliveryPage {
     }
 
     loadMap() {
+        setTimeout( () => {
+            this.getVehicles({});
+        }, 10000);
         this.geolocation.getCurrentPosition().then( response => {
             this.lat = response.coords.latitude;
             this.lng = response.coords.longitude;

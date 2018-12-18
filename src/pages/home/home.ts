@@ -23,7 +23,7 @@ export class HomePage {
     vehicles: any = [];
     lat: any;
     lng: any;
-    markers: any = [];
+    markers: any = [{}];
     markersCopy: any = [{}];
     bounds: LatLng[] = [];
 
@@ -78,6 +78,9 @@ export class HomePage {
     }
 
     loadMap() {
+        setTimeout( () => {
+            this.getVehicles({});
+        }, 10000);
         this.geolocation.getCurrentPosition().then( response => {
             this.lat = response.coords.latitude;
             this.lng = response.coords.longitude;

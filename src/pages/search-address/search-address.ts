@@ -49,7 +49,6 @@ export class SearchAddressPage {
                         handler: () => {
                             this.loading = this.loadingCtrl.create({
                                 content: 'Please wait...',
-                                enableBackdropDismiss: true
                             });
                             this.loading.present();
                             this.getLocation();
@@ -62,6 +61,19 @@ export class SearchAddressPage {
     }
 
     getLocation() {
+        let counter = 0;
+        
+        setTimeout( () => {
+            let toast = this.toast.create({
+                message: 'Sorry we cannot fetch your location. Please try again.',
+                duration: 3000,
+                position: 'bottom'
+            });
+            toast.present();
+            this.loading.dismiss();
+            this.viewCtrl.dismiss();
+            return;
+        }, 10000);
         this.geolocation.getCurrentPosition().then( response => {
             let lat = response.coords.latitude;
             let long = response.coords.longitude;
@@ -79,16 +91,36 @@ export class SearchAddressPage {
                     this.viewCtrl.dismiss({
                         description: this.autocomplete.query
                     });
+                    return;
                 } else {
                     let toast = this.toast.create({
-                        message: 'Error fetching location. Please try again.',
+                        message: 'Sorry we cannot fetch your location. Please try again.',
                         duration: 3000,
                         position: 'bottom'
                     });
                     toast.present();
                     this.loading.dismiss();
+                    return;
                 }
+            }, (err) => {
+                let toast = this.toast.create({
+                    message: 'Sorry we cannot fetch your location. Please try again.',
+                    duration: 3000,
+                    position: 'bottom'
+                });
+                toast.present();
+                this.loading.dismiss();
+                return;
             });
+        }).catch( error => {
+            let toast = this.toast.create({
+                message: 'Sorry we cannot fetch your location. Please try again.',
+                duration: 3000,
+                position: 'bottom'
+            });
+            toast.present();
+            this.loading.dismiss();
+            return;
         });
     }
 
