@@ -3,7 +3,7 @@
         <ion-col>
         </ion-col>
         <ion-col width-67>
-            <img src="assets/imgs/carga_logo.png">
+            <h3>Sign up</h3>
         </ion-col>
         <ion-col></ion-col>
     </ion-row>
@@ -38,13 +38,22 @@
                             <ion-input type="password" (keyup)="validateConfirmPassword($event)" placeholder="Confirm Password" name="confirmpassword" [(ngModel)]="user.confirmPassword" required></ion-input>
                         </ion-item>
                         <ion-label *ngIf="errorMessages.confirmPassword" class="error-text">{{errorMessages.confirmPassword}}</ion-label>
+
+                        <ion-row text-left>
+                            <ion-col col-1>
+                                <ion-checkbox name="terms" class="checkbox-terms" [(ngModel)]="checked"></ion-checkbox>
+                            </ion-col>
+                            <ion-col col-11>
+                                <ion-label class="terms-conditions">I agree to the <span class="link-text" (click)="goToTerms()">Terms and Conditions and Privacy Policy</span></ion-label>
+                            </ion-col>
+                        </ion-row>
                     </ion-list>
                 </ion-col>
             </ion-row>
             
             <ion-row>
                 <ion-col class="signup-col">
-                    <button ion-button class="submit-btn" full type="submit" [disabled]="!signUpForm.valid || isLoading || errorMessages.confirmPassword || errorMessages.email">Signup</button>
+                    <button ion-button class="submit-btn" full type="submit" [disabled]="!signUpForm.valid || !checked || isLoading || errorMessages.confirmPassword || errorMessages.email">Signup</button>
                     <button ion-button class="register-btn" type="button" block clear (click)="login()">Already have an account? Login here</button>
                 </ion-col>
             </ion-row>

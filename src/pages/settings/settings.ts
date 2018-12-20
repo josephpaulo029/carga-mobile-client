@@ -38,6 +38,10 @@ export class SettingsPage implements OnInit {
         });
     }
 
+    viewAttachments() {
+        this.navCtrl.push('AttachmentsPage');
+    }
+
     getWithoutLoading() {
         this.storage.get('authToken').then( token => {
             this.accountService.get(token).subscribe( data => {

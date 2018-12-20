@@ -37,48 +37,14 @@ export class PackageItemPage {
 
     ionViewDidLoad() {
         this.deliveryId = this.navParams.get('deliveryId');
-        this.storage.get('currentLocation').then( value => {
-            if(value) {
-                this.map = GoogleMaps.create('map', {
-                    camera: {
-                        target: {
-                            lat: value.lat,
-                            lng: value.lng
-                        },
-                        zoom: 5
-                    }
-                });
-
-                let coordinates: LatLng = new LatLng(value.lat, value.lng);
-                if(this.isEmptyObject(this.markers[0])) {
-                    this.setLocationMarker(coordinates);
-                } else {
-                    this.markers[0].setPosition({
-                        lat: value.lat,
-                        lng: value.lng
-                    });
-                }
-            } else {
-                this.map = GoogleMaps.create('map', {
-                    camera: {
-                        target: {
-                            lat: 12.8797,
-                            lng: 121.7740
-                        },
-                        zoom: 5
-                    }
-                });
+        this.map = GoogleMaps.create('map', {
+            camera: {
+                target: {
+                    lat: 12.8797,
+                    lng: 121.7740
+                },
+                zoom: 5
             }
-        }).catch( () => {
-            this.map = GoogleMaps.create('map', {
-                camera: {
-                    target: {
-                        lat: 12.8797,
-                        lng: 121.7740
-                    },
-                    zoom: 5
-                }
-            });
         });
         this.getDelivery();
     }
@@ -120,24 +86,27 @@ export class PackageItemPage {
     
                     this.initDevices();
                     this.initWebSockets();
-                } else if(this.package.deliveryStatus == 'completed') {
-                    console.log('package', this.package);
+                } else if(this.package.deliveryStatus == 'completed' || this.package.deliveryStatus == 'pending.clientRequest' || this.package.deliveryStatus == 'pending.ownerAccepted') {
                     let destinationLatLng = this.package.destination.split(',');
                     let pickupLatLng = this.package.pickupLocation.split(',');
 
-                    this.markers[0].setPosition({
-                        lat: pickupLatLng[0],
-                        lng: pickupLatLng[1]
+                    let marker1= this.map.addMarkerSync({
+                        icon: 'assets/imgs/user-marker.png',
+                        position: {
+                            lat: pickupLatLng[0],
+                            lng: pickupLatLng[1]
+                        }
                     });
+                    this.markers[0] = marker1;
 
-                    let marker = this.map.addMarkerSync({
+                    let marker2 = this.map.addMarkerSync({
                         icon: 'assets/imgs/user-marker.png',
                         position: {
                             lat: destinationLatLng[0],
                             lng: destinationLatLng[1]
                         }
                     });
-                    this.markers[1] = marker;
+                    this.markers[1] = marker2;
 
                     let points = [
                         {
@@ -169,65 +138,32 @@ export class PackageItemPage {
         return true;
     }
 
-    setLocationMarker(coordinates) {
-        let marker = this.map.addMarkerSync({
-            icon: 'assets/imgs/user-marker.png',
-            position: {
-                lat: coordinates.lat,
-                lng: coordinates.lng
-            }
-        });
-        this.markers[0] = marker;
-    }
-
     loadMap() {
-        if(this.package.deliveryStatus != 'completed') {
-            this.geolocation.getCurrentPosition().then( response => {
-                this.lat = response.coords.latitude;
-                this.lng = response.coords.longitude;
-
-                this.storage.set('currentLocation', {
-                    lat: this.lat,
-                    lng: this.lng
-                });
-
-                let coordinates: LatLng = new LatLng(this.lat, this.lng);
-
-                if(this.isEmptyObject(this.markers[0])) {
-                    this.setLocationMarker(coordinates);
-                } else {
-                    this.markers[0].setPosition({
-                        lat: this.lat,
-                        lng: this.lng
-                    });
-                }
-
-                if(this.package.deliveryStatus == 'pending.clientRequest' || this.package.deliveryStatus == 'pending.ownerAccepted') {
-                    this.map.setCameraTarget(coordinates);
-                    this.map.setCameraZoom(13);
-                }
-            });
-
-            let watch = this.geolocation.watchPosition();
-            watch.subscribe( data => {
-                this.lat = data.coords.latitude;
-                this.lng = data.coords.longitude;
-
-                this.storage.set('currentLocation', {
-                    lat: this.lat,
-                    lng: this.lng
-                });
-
-                this.markers[0].setPosition({
-                    lat: this.lat,
-                    lng: this.lng
-                });
-            });
-        } else if(this.package.deliveryStatus == 'completed') {
+        if(this.package.deliveryStatus == 'completed' || this.package.deliveryStatus == 'pending.clientRequest' || this.package.deliveryStatus == 'pending.ownerAccepted') {
             let pickupLocation = this.package.pickupLocation.split(',');
             let pickupCoordinates: LatLng = new LatLng(pickupLocation[0], pickupLocation[1]);
             this.map.setCameraTarget(pickupCoordinates);
             this.map.setCameraZoom(13);
+        } else if(this.package.deliveryStatus == 'inProgress.driverAccepted' || this.package.deliveryStatus == 'inProgress.driverForPickup') {
+            let pickupLocation = this.package.pickupLocation.split(',');
+            let marker = this.map.addMarkerSync({
+                icon: 'assets/imgs/user-marker.png',
+                position: {
+                    lat: pickupLocation[0],
+                    lng: pickupLocation[1]
+                }
+            });
+            this.markers[0] = marker;
+        } else if(this.package.deliveryStatus == 'inProgress.driverEnRoute' || this.package.deliveryStatus == 'inProgress.driverForDropoff') {
+            let destination = this.package.destination.split(',');
+            let marker = this.map.addMarkerSync({
+                icon: 'assets/imgs/user-marker.png',
+                position: {
+                    lat: destination[0],
+                    lng: destination[1]
+                }
+            });
+            this.markers[0] = marker;
         }
     }
 

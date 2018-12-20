@@ -1,0 +1,16 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Attachments</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div text-center margin-top *ngIf="isLoading">
+        <ion-spinner></ion-spinner>
+    </div>
+    <ion-list margin-top *ngIf="!isLoading && user.custom && user.custom.attachments && user.custom.attachments.length">
+        <ion-item text-center *ngFor="let attachment of user.custom.attachments; let i = index" (click)="viewAttachment(attachment)">
+            <span class="attachment-text">Attachment {{i+1}}</span>
+        </ion-item>
+    </ion-list>
+</ion-content>

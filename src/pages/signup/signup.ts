@@ -21,6 +21,7 @@ export class SignupPage {
         email: '',
         confirmPassword: ''
     };
+    checked: Boolean = false;
 
     constructor(public navCtrl: NavController, 
         private toast: ToastController,
@@ -28,6 +29,10 @@ export class SignupPage {
 
     login() {
         this.navCtrl.push('LoginPage');
+    }
+
+    goToTerms() {
+        this.navCtrl.push('TermsConditionsPage');
     }
 
     signUp(user) {

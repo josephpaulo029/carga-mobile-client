@@ -9,8 +9,11 @@ page-signup {
         background: color($colors, primary);
  
         .logo-row {
-            padding-top: 50px;
-            padding-bottom: 20px;
+            padding-top: 30px;
+        }
+
+        h3 {
+            color: #fff;
         }
 
         .logo-text {
@@ -60,6 +63,19 @@ page-signup {
             color: #ffffff;
             font-size: 0.8em;
         }
+    }
+
+    .terms-conditions {
+        color: #efefef;
+        white-space: normal;
+    }
+
+    .link-text {
+        color: #94D9FF;
+    }
+    
+    .checkbox-terms {
+        display: inline-block;
     }
  
 }

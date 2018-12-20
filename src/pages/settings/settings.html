@@ -42,7 +42,8 @@
                 <ion-input (keyup)="updateUser(user)" required [(ngModel)]="user.fullName" name="fullname"></ion-input>
             </ion-item>
             <ion-item>
-                <button ion-button (click)="changePassword(user)" color="secondary">Change Password</button>
+                <button ion-button item-start (click)="changePassword(user)" color="secondary">Change password</button>
+                <button ion-button outline item-end (click)="viewAttachments()" class="view-attachments">View attachments</button>
             </ion-item>
         </ion-list>
     </form>
