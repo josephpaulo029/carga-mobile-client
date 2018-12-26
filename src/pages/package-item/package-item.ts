@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavParams } from 'ionic-angular';
 import { DeliveryService } from '../../providers/delivery.api';
-import { Geolocation } from '@ionic-native/geolocation';
 import { DeviceSocket } from '../../providers/devicesocket.service';
 import { Storage } from '@ionic/storage';
 import {
     GoogleMaps,
     GoogleMap,
-    LatLng,
-    LatLngBounds
+    LatLng
 } from '@ionic-native/google-maps';
 
 @IonicPage()
@@ -31,7 +29,6 @@ export class PackageItemPage {
     constructor(public navParams: NavParams, 
         private storage: Storage,
         private deviceSocket: DeviceSocket,
-        private geolocation: Geolocation,
         private deliveryService: DeliveryService) {
     }
 
