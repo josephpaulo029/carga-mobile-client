@@ -7,6 +7,7 @@ import { DatePicker } from '@ionic-native/date-picker';
 import { DeviceSocket } from '../../providers/devicesocket.service';
 import { Geolocation } from '@ionic-native/geolocation';
 import { VehicleService } from '../../providers/vehicle.api';
+import { ApplicationService } from '../../providers/application.api';
 
 declare var google:any;
 import {
@@ -19,7 +20,7 @@ import {
 @Component({
   selector: 'page-request-delivery',
   templateUrl: 'request-delivery.html',
-  providers: [AuthService, DeliveryService, VehicleService, DeviceSocket]
+  providers: [AuthService, DeliveryService, VehicleService, DeviceSocket, ApplicationService]
 })
 export class RequestDeliveryPage {
     deliveryObj: any = {
@@ -47,6 +48,7 @@ export class RequestDeliveryPage {
     line: any = {};
     devices: any = [];
     vehicles: any = [];
+    packageTypes: any = [];
 
     constructor(private storage: Storage, 
         private datePicker: DatePicker,
@@ -55,6 +57,7 @@ export class RequestDeliveryPage {
         private geolocation: Geolocation,
         private deviceSocket: DeviceSocket,
         private modalCtrl: ModalController,
+        private applicationService: ApplicationService,
         private deliveryService: DeliveryService,
         private vehicleService: VehicleService,
         private auth: AuthService) {
@@ -62,6 +65,7 @@ export class RequestDeliveryPage {
 
     ionViewDidLoad() {
         this.getUser();
+        this.getPackageTypes();
         this.storage.get('currentLocation').then( value => {
             if(value) {
                 this.map = GoogleMaps.create('map', {
@@ -107,6 +111,14 @@ export class RequestDeliveryPage {
     listenToSocketStatus() {
         this.deviceSocket.on('connect', () => {
             this.loadMap();
+        });
+    }
+
+    getPackageTypes() {
+        this.storage.get('authToken').then( value => {
+            this.applicationService.get(value).subscribe( data => {
+                this.packageTypes = data['data'][0].custom.packageTypes;
+            });
         });
     }
 

@@ -45,11 +45,7 @@
             <ion-item>
                 <ion-label>Package Type</ion-label>
                 <ion-select required [(ngModel)]="deliveryObj.packageType" name="type">
-                    <ion-option value="perishableFood">Perishable Food</ion-option>
-                    <ion-option value="preservedFood">Preserved Food</ion-option>
-                    <ion-option value="document">Document</ion-option>
-                    <ion-option value="electronics">Electronics</ion-option>
-                    <ion-option value="clothing">Clothing</ion-option>
+                    <ion-option [value]="type.value" *ngFor="let type of packageTypes">{{type.display}}</ion-option>
                 </ion-select>
             </ion-item>
             <ion-item>

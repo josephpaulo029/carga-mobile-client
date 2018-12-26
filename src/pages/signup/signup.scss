@@ -7,13 +7,10 @@ page-signup {
  
     .signup-content {
         background: color($colors, primary);
- 
-        .logo-row {
-            padding-top: 30px;
-        }
 
         h3 {
             color: #fff;
+            margin-bottom: 0;
         }
 
         .logo-text {
