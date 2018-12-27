@@ -106,6 +106,10 @@
                     <ion-col class="value-text">Package Size</ion-col>
                     <ion-col>{{length.toString() + 'x' + width.toString() + 'x' + height.toString()}}</ion-col>
                 </ion-item>
+                <ion-item>
+                    <ion-col class="value-text">Price</ion-col>
+                    <ion-col>Php {{deliveryPrice}}</ion-col>
+                </ion-item>
             </div>
             <div padding margin-top>
                 <h5 text-left ion-text color="primary" (click)="currentPage = 3">Previous</h5>

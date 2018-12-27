@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController, NavController, ModalController } from 'ionic-angular';
+import { IonicPage, ToastController, NavController, ModalController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth.api';
 import { DeliveryService } from '../../providers/delivery.api';
@@ -8,6 +8,7 @@ import { DeviceSocket } from '../../providers/devicesocket.service';
 import { Geolocation } from '@ionic-native/geolocation';
 import { VehicleService } from '../../providers/vehicle.api';
 import { ApplicationService } from '../../providers/application.api';
+import { PricingService } from '../../providers/pricing.api';
 
 declare var google:any;
 import {
@@ -20,7 +21,7 @@ import {
 @Component({
   selector: 'page-request-delivery',
   templateUrl: 'request-delivery.html',
-  providers: [AuthService, DeliveryService, VehicleService, DeviceSocket, ApplicationService]
+  providers: [AuthService, DeliveryService, VehicleService, DeviceSocket, ApplicationService, PricingService]
 })
 export class RequestDeliveryPage {
     deliveryObj: any = {
@@ -49,6 +50,8 @@ export class RequestDeliveryPage {
     devices: any = [];
     vehicles: any = [];
     packageTypes: any = [];
+    loading: any;
+    deliveryPrice: any;
 
     constructor(private storage: Storage, 
         private datePicker: DatePicker,
@@ -57,6 +60,8 @@ export class RequestDeliveryPage {
         private geolocation: Geolocation,
         private deviceSocket: DeviceSocket,
         private modalCtrl: ModalController,
+        private pricingService: PricingService,
+        private loadingCtrl: LoadingController,
         private applicationService: ApplicationService,
         private deliveryService: DeliveryService,
         private vehicleService: VehicleService,
@@ -229,32 +234,50 @@ export class RequestDeliveryPage {
     }
 
     visitPage(page) {
-        if(page > this.currentPage) {if(this.currentPage == 1) {
-            if(page == 2) {
-                if(!(this.selectedDate && this.selectedTime && this.deliveryObj.pickupLocation)) { 
-                    this.errorVisitingPage();
-                    return;
-                }
-            } else {
-                return;
-            }
-
-        } else if(this.currentPage == 2) {
-            if(page == 3) {
-                if(!(this.deliveryObj.destination && this.deliveryObj.custom.receiverContactNumber)) {
-                    this.errorVisitingPage();
-                    return;
-                }
-            } else {
-                return;
-            }
-
-        } else if(this.currentPage == 3) {
-                if(page == 4) {
-                    if(!(this.deliveryObj.packageType && this.deliveryObj.weight && this.length && this.width && this.height)) {
+        if(page > this.currentPage) {
+            if(this.currentPage == 1) {
+                if(page == 2) {
+                    if(!(this.selectedDate && this.selectedTime && this.deliveryObj.pickupLocation)) { 
                         this.errorVisitingPage();
                         return;
                     }
+                } else {
+                    return;
+                }
+
+            } else if(this.currentPage == 2) {
+                if(page == 3) {
+                    if(!(this.deliveryObj.destination && this.deliveryObj.custom.receiverContactNumber)) {
+                        this.errorVisitingPage();
+                        return;
+                    }
+                } else {
+                    return;
+                }
+
+            } else if(this.currentPage == 3) {
+                if(page == 4) {
+                    this.storage.get('authToken').then( token => {
+                        this.loading = this.loadingCtrl.create({
+                            content: 'Please wait...',
+                        });
+                        this.loading.present();
+                        let pricingObj = {
+                            pickupLocation: this.deliveryObj.pickupLocation,
+                            destination: this.deliveryObj.destination,
+                            packageType: this.deliveryObj.packageType,
+                            weight: this.deliveryObj.weight,
+                            volume: this.length.toString() + 'x' + this.width.toString() + 'x' + this.height.toString()
+                        };
+                        this.pricingService.get(pricingObj, token).subscribe( data => {
+                            this.deliveryPrice = data['data'].price;
+                            this.loading.dismiss();
+                            if(!(this.deliveryObj.packageType && this.deliveryObj.weight && this.length && this.width && this.height)) {
+                                this.errorVisitingPage();
+                                return;
+                            }
+                        })
+                    });
                 } else {
                     return;
                 }
