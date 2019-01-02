@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { IonicPage, Events, NavController } from 'ionic-angular';
 import { NotificationService } from '../../providers/notification.api'; 
 import { Storage } from '@ionic/storage';
@@ -8,26 +8,27 @@ import { Storage } from '@ionic/storage';
   selector: 'page-notifications',
   templateUrl: 'notifications.html'
 })
-export class NotificationsPage implements OnInit {
+export class NotificationsPage {
 
   notifications: any = [];
   isLoading: Boolean = false;
+  lastEvaluatedKey: any;
+  timestamp: any;
+  isRefreshed: Boolean = false;
   
   constructor(private notificationService: NotificationService, 
     private events: Events,
     private navCtrl: NavController,
     private storage: Storage) {
       this.events.subscribe('notifications', () => {
-        this.getNotifications();
+        this.refreshNotifications({limit: 12});
       });
   }
 
-  ngOnInit() {
-    this.getNotifications();
-  }
-
   ionViewWillEnter() {
-    this.getWithoutLoading();
+    if(!this.notifications.length) {
+      this.getNotifications({limit: 12});
+    }
   }
 
   mark(notification) {
@@ -39,26 +40,43 @@ export class NotificationsPage implements OnInit {
     });
   }
 
-  getNotifications() {
-    this.isLoading = true;
+  refreshNotifications(params, refresher?) {
+    this.notifications = [];
+    this.isRefreshed = true;
     this.storage.get('authToken').then ( token => {
-      this.notificationService.getAll(token).subscribe( data => {
+      this.notificationService.getAll(params, token).subscribe( (notifs: any) => {
         this.isLoading = false;
-        this.notifications = data['data'] || [];
-      })
-    });
-  }
-
-  getWithoutLoading(refresher?) {
-    this.storage.get('authToken').then ( token => {
-      this.notificationService.getAll(token).subscribe( data => {
-        this.notifications = data['data'] || [];
+        this.isRefreshed = false;
+        this.notifications = notifs.data;
+        this.onFetchSuccess(notifs);
 
         if(refresher) {
           refresher.complete();
         }
       })
     });
+  }
+  
+
+  getNotifications(params) {
+    this.isLoading = true;
+    this.storage.get('authToken').then ( token => {
+      this.notificationService.getAll(params, token).subscribe( (notifs: any) => {
+        this.isLoading = false;
+        this.notifications = this.notifications.concat(notifs.data || []);
+        this.onFetchSuccess(notifs);
+      })
+    });
+  }
+
+  onFetchSuccess(data) {
+    this.isLoading = false;
+    if(!data.lastEvaluatedKey) {
+      this.lastEvaluatedKey = data.lastEvaluatedKey;
+      return;
+    }
+    this.lastEvaluatedKey = data.lastEvaluatedKey.ownerId;
+    this.timestamp = data.lastEvaluatedKey.dateCreated;
   }
 
   visitNotification(notification) {

@@ -39,18 +39,16 @@ export class NotificationService {
         return this.http.post(url, notification, httpOptions);
     }
 
-    getAll(token) {
+    getAll(params, token) {
         const url = this.url + '/notification';
 
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type':  'application/json',
-                'Authorization': 'Bearer ' + token,
-                'x-api-key': environment.apiKey
-            })
-        };
+        const headers = new HttpHeaders({
+            'Content-Type':  'application/json',
+            'Authorization': 'Bearer ' + token,
+            'x-api-key': environment.apiKey
+        })
 
-        return this.http.get(url, httpOptions);
+        return this.http.get(url, {headers, params});
     }
 
 }

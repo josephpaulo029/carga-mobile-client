@@ -43,7 +43,7 @@ export class TabsPage {
     getNotifications() {
       this.unreads = 0;
       this.storage.get('authToken').then ( token => {
-        this.notificationService.getAll(token).subscribe( data => {
+        this.notificationService.getAll({}, token).subscribe( data => {
           let notifications = data['data'] || [];
           notifications.map( item => {
             if(item.isUnread) this.unreads += 1;

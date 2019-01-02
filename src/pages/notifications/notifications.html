@@ -9,14 +9,11 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content>
-    <ion-refresher (ionRefresh)="getWithoutLoading($event)">
+<ion-content #content>
+    <ion-refresher (ionRefresh)="refreshNotifications({limit: 12}, $event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <div text-center margin-top *ngIf="isLoading">
-        <ion-spinner></ion-spinner>
-    </div>
-    <ion-list *ngIf="!isLoading && notifications.length">
+    <ion-list *ngIf="notifications.length">
         <ion-card *ngFor="let notification of notifications" (click)="visitNotification(notification)">
             <ion-item-sliding #item>
                 <ion-item [ngClass]="{'is-unread': notification.isUnread}">
@@ -51,4 +48,12 @@
             </ion-item-sliding>
         </ion-card>
     </ion-list>
+    
+    <div text-center margin-top margin-bottom *ngIf="isLoading">
+        <ion-spinner></ion-spinner>
+    </div>
+
+    <div text-center margin-top margin-bottom *ngIf="!isLoading && !isRefreshed">
+        <button ion-button color="light" *ngIf="lastEvaluatedKey" (click)="getNotifications({limit: 12, lastEvaluatedKey: lastEvaluatedKey + ',' + timestamp})">View more</button>
+    </div>
 </ion-content>
