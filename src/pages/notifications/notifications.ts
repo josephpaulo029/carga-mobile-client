@@ -41,7 +41,6 @@ export class NotificationsPage {
   }
 
   refreshNotifications(params, refresher?) {
-    this.notifications = [];
     this.isRefreshed = true;
     this.storage.get('authToken').then ( token => {
       this.notificationService.getAll(params, token).subscribe( (notifs: any) => {
