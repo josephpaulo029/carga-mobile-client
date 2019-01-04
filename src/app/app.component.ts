@@ -10,6 +10,7 @@ import { DeviceSocket } from '../providers/devicesocket.service';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { Geolocation } from '@ionic-native/geolocation';
+import { environment } from '../environments/environment';
 
 import { LoginPage, TabsPage, VerifyClientPage } from '../pages';
 @Component({
@@ -19,6 +20,7 @@ import { LoginPage, TabsPage, VerifyClientPage } from '../pages';
 export class MyApp {
   rootPage:any = LoginPage;
   user: any = {};
+  environment = environment;
   @ViewChild(Nav) nav: Nav;
 
   constructor(platform: Platform, 
