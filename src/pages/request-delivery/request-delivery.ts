@@ -52,6 +52,7 @@ export class RequestDeliveryPage {
     packageTypes: any = [];
     loading: any;
     deliveryPrice: any;
+    isLoading: Boolean = false;
 
     constructor(private storage: Storage, 
         private datePicker: DatePicker,
@@ -266,8 +267,9 @@ export class RequestDeliveryPage {
             } else if(this.currentPage == 3) {
                 if(page == 4) {
                     this.storage.get('authToken').then( token => {
+                        this.isLoading = true;
                         this.loading = this.loadingCtrl.create({
-                            content: 'Please wait...',
+                            content: 'Calculating price...',
                         });
                         this.loading.present();
                         let pricingObj = {
@@ -278,6 +280,7 @@ export class RequestDeliveryPage {
                             volume: this.length.toString() + 'x' + this.width.toString() + 'x' + this.height.toString()
                         };
                         this.pricingService.get(pricingObj, token).subscribe( data => {
+                            this.isLoading = false;
                             this.deliveryPrice = data['data'].price;
                             this.loading.dismiss();
                             if(!(this.deliveryObj.packageType && this.deliveryObj.weight && this.length && this.width && this.height)) {

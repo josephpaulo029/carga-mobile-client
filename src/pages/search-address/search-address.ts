@@ -63,7 +63,7 @@ export class SearchAddressPage {
     getLocation() {
         let counter = 0;
         
-        setTimeout( () => {
+        let timeout = setTimeout( () => {
             let toast = this.toast.create({
                 message: 'Sorry we cannot fetch your location. Please try again.',
                 duration: 3000,
@@ -91,6 +91,7 @@ export class SearchAddressPage {
                     this.viewCtrl.dismiss({
                         description: this.autocomplete.query
                     });
+                    clearTimeout(timeout);
                     return;
                 } else {
                     let toast = this.toast.create({

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage, NavController, Events } from 'ionic-angular';
 import { DeliveryService } from '../../providers/delivery.api';
 import { Storage } from '@ionic/storage';
 
@@ -17,7 +17,13 @@ export class PackagesPage implements OnInit {
 
   constructor(private deliveryService: DeliveryService, 
     private navCtrl: NavController,
+    private events: Events,
     private storage: Storage) {
+
+      this.events.subscribe('go-to-packages', () => {
+        this.filter.deliveryStatus = 'pending';
+        this.getPackages(this.filter);
+      });
   }
 
   ngOnInit() {
