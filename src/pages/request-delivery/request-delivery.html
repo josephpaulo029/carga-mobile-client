@@ -91,11 +91,7 @@
                 <ion-item>
                     <ion-col class="value-text">Package Type</ion-col>
                     <ion-col>
-                        {{deliveryObj.packageType === 'perishableFood' ? 'Perishable Food' : ''}}
-                        {{deliveryObj.packageType === 'preservedFood' ? 'Preserved Food' : ''}}
-                        {{deliveryObj.packageType === 'document' ? 'Document' : ''}}
-                        {{deliveryObj.packageType === 'electronics' ? 'Electronics' : ''}}
-                        {{deliveryObj.packageType === 'clothing' ? 'Clothing' : ''}}
+                        {{getPackageTypeLabel(deliveryObj.packageType)}}
                     </ion-col>
                 </ion-item>
                 <ion-item>

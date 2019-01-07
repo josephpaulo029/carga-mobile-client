@@ -124,6 +124,7 @@ export class RequestDeliveryPage {
         this.storage.get('authToken').then( value => {
             this.applicationService.get(value).subscribe( data => {
                 this.packageTypes = data['data'][0].custom.packageTypes;
+                console.log('packageTypes', this.packageTypes);
             });
         });
     }
@@ -151,6 +152,12 @@ export class RequestDeliveryPage {
                 this.initDevices();
             });
         })
+    }
+
+    getPackageTypeLabel(packageType) {
+        let index = this.packageTypes.findIndex( item => item.value === packageType);
+        
+        return this.packageTypes[index].display;
     }
 
     loadMap() {
@@ -308,6 +315,7 @@ export class RequestDeliveryPage {
         delivery.custom.pickupLocationAddressString = this.selectedPickup;
         delivery.custom.destinationAddressString = this.selectedDestination;
         delivery.dimension = this.length.toString() + 'x' + this.width.toString() + 'x' + this.height.toString();
+        delivery.packageTypeDisplay = this.getPackageTypeLabel(this.deliveryObj.packageType);
         this.storage.get('authToken').then( token => {
             this.deliveryService.create(delivery, token).subscribe( () => {
                 let toast = this.toast.create({
