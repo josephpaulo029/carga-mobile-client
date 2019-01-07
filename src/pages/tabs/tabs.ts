@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, IonicPage, Events, Tabs } from 'ionic-angular';
+import { NavController, IonicPage, Events, Tabs, Platform } from 'ionic-angular';
 import { NotificationService } from '../../providers/notification.api'; 
 import { Storage } from '@ionic/storage';
 import { HomePage, PackagesPage, SettingsPage, NotificationsPage } from '../';
@@ -21,7 +21,12 @@ export class TabsPage {
     constructor(public navCtrl: NavController, 
       private storage: Storage,
       private events: Events,
+      private platform: Platform,
       private notificationService: NotificationService) {
+
+        this.platform.backButton.subscribe(() => {
+          this.navCtrl.setRoot('TabsPage');
+        });
 
         this.events.subscribe('notifications', () => {
           this.getNotifications();

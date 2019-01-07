@@ -333,6 +333,10 @@ export class RequestDeliveryPage {
         );
     }
 
+    roundOff(number) {
+        return Math.round(number * 100) / 100;
+    }
+
     formatTime(time) {
         // Check correct time format and split into components
         if(time) {
