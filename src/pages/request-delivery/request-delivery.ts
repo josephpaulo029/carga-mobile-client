@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController, NavController, ModalController, LoadingController } from 'ionic-angular';
+import { IonicPage, ToastController, NavController, ModalController, LoadingController, Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { AuthService } from '../../providers/auth.api';
 import { DeliveryService } from '../../providers/delivery.api';
@@ -65,6 +65,7 @@ export class RequestDeliveryPage {
         private applicationService: ApplicationService,
         private deliveryService: DeliveryService,
         private vehicleService: VehicleService,
+        private events: Events,
         private auth: AuthService) {
     }
 
@@ -317,6 +318,7 @@ export class RequestDeliveryPage {
                 toast.present();
                 this.isSaving = false;
                 this.navCtrl.pop();
+                this.events.publish('go-to-packages');
             });
         });
     }

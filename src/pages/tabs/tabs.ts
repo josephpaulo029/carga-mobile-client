@@ -24,6 +24,10 @@ export class TabsPage {
       private platform: Platform,
       private notificationService: NotificationService) {
 
+        this.events.subscribe('go-to-packages', () => {
+          this.tabRef.select(1);
+        });
+
         this.platform.backButton.subscribe(() => {
           this.navCtrl.setRoot('TabsPage');
         });
