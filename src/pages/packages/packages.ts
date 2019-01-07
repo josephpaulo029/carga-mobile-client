@@ -33,8 +33,12 @@ export class PackagesPage implements OnInit {
     this.isLoading = true;
     this.storage.get('authToken').then( token => {
       this.deliveryService.getAll(params, token).subscribe( data => {
+        let sortedPackages = data['data'].sort( (a, b) => {
+          return b.pickupDate - a.pickupDate;
+        })
+        this.packages = sortedPackages || [];
+
         this.isLoading = false;
-        this.packages = data['data'];
       });
     })
   }
@@ -42,7 +46,10 @@ export class PackagesPage implements OnInit {
   getWithoutLoading(params, refresher?) {
     this.storage.get('authToken').then( token => {
       this.deliveryService.getAll(params, token).subscribe( data => {
-        this.packages = data['data'];
+        let sortedPackages = data['data'].sort( (a, b) => {
+          return b.pickupDate - a.pickupDate;
+        })
+        this.packages = sortedPackages || [];
 
         if(refresher) {
           refresher.complete();
