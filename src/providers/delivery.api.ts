@@ -64,4 +64,17 @@ export class DeliveryService {
 
     }
 
+    delete(id, token) {
+        const url = this.url + '/custom-carga/delivery/client/' + id;
+
+        const headers = new HttpHeaders({
+            'Content-Type':  'application/json',
+            'Authorization': 'Bearer ' + token,
+            'x-api-key': environment.apiKey
+        })
+
+        return this.http.delete(url, {headers});
+
+    }
+
 }

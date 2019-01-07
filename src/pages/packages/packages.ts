@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, Events } from 'ionic-angular';
+import { IonicPage, NavController, Events, AlertController } from 'ionic-angular';
 import { DeliveryService } from '../../providers/delivery.api';
 import { Storage } from '@ionic/storage';
 
@@ -18,6 +18,7 @@ export class PackagesPage implements OnInit {
   constructor(private deliveryService: DeliveryService, 
     private navCtrl: NavController,
     private events: Events,
+    private alertCtrl: AlertController,
     private storage: Storage) {
 
       this.events.subscribe('go-to-packages', () => {
@@ -34,14 +35,43 @@ export class PackagesPage implements OnInit {
   ionViewWillEnter() {
     this.getWithoutLoading(this.filter);
   }
+
+  cancelDelivery(delivery) {
+    let alert = this.alertCtrl.create({
+      title: 'Cancel delivery request',
+      message: 'Are you sure to cancel this request?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.isLoading = true;
+            this.storage.get('authToken').then( token => {
+              this.deliveryService.delete(delivery.deliveryId, token).subscribe( () => {
+                this.getPackages(this.filter);
+              });
+            })
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
  
   getPackages(params) {
     this.isLoading = true;
     this.storage.get('authToken').then( token => {
       this.deliveryService.getAll(params, token).subscribe( data => {
-        let sortedPackages = data['data'].sort( (a, b) => {
+        let packages = data['data'] || [];
+        let sortedPackages = packages.sort( (a, b) => {
           return b.pickupDate - a.pickupDate;
-        })
+        });
         this.packages = sortedPackages || [];
 
         this.isLoading = false;

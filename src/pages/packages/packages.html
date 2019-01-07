@@ -68,6 +68,10 @@
                             </ion-note>
                         </ion-col>
                     </ion-row>
+                    
+                    <div class="cancel-delivery" text-center *ngIf="package.deliveryStatus =='pending.clientRequest'" (click)="$event.stopPropagation();cancelDelivery(package)">
+                        Cancel delivery
+                    </div>
                 </ion-grid>
             </ion-card-content>
             <ion-row>
