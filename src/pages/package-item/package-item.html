@@ -35,11 +35,7 @@
                 <ion-row>
                     <ion-col col-5>
                         <ion-note>
-                            {{package.packageType === 'perishableFood' ? 'Perishable Food' : ''}}
-                            {{package.packageType === 'preservedFood' ? 'Preserved Food' : ''}}
-                            {{package.packageType === 'document' ? 'Document' : ''}}
-                            {{package.packageType === 'electronics' ? 'Electronics' : ''}}
-                            {{package.packageType === 'clothing' ? 'Clothing' : ''}}
+                            {{package.packageTypeDisplay || ''}}
                         </ion-note>
                     </ion-col>
                     <ion-col col-5>
