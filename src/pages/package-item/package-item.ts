@@ -34,24 +34,23 @@ export class PackageItemPage {
 
     ionViewDidLoad() {
         this.deliveryId = this.navParams.get('deliveryId');
-        this.map = GoogleMaps.create('map', {
-            camera: {
-                target: {
-                    lat: 12.8797,
-                    lng: 121.7740
-                },
-                zoom: 5
-            }
-        });
         this.getDelivery();
     }
-
     getDelivery() {
         this.isLoading = true;
         this.storage.get('authToken').then( token => {
             this.deliveryService.getOne(this.deliveryId, token).subscribe( data => {
                 this.isLoading = false;
                 this.package = data['data'];
+                this.map = GoogleMaps.create('map', {
+                    camera: {
+                        target: {
+                            lat: 12.8797,
+                            lng: 121.7740
+                        },
+                        zoom: 5
+                    }
+                });
 
                 this.loadMap();
 
