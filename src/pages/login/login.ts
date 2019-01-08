@@ -73,13 +73,16 @@ export class LoginPage {
     }
 
     createAccount() {
-        this.navCtrl.push('SignupPage');
+        if(!this.isLoading)
+            this.navCtrl.push('SignupPage');
     }
 
     forgotPassword() {
-        this.navCtrl.push('ForgotPasswordPage', {
-            username: this.user.username
-        });
+        if(!this.isLoading) {
+            this.navCtrl.push('ForgotPasswordPage', {
+                username: this.user.username
+            });
+        }
     }
 
 }

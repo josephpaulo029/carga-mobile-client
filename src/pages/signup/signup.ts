@@ -32,7 +32,8 @@ export class SignupPage {
     }
 
     goToTerms() {
-        this.navCtrl.push('TermsConditionsPage');
+        if(!this.isLoading)
+            this.navCtrl.push('TermsConditionsPage');
     }
 
     signUp(user) {
