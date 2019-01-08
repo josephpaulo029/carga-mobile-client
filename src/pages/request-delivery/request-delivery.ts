@@ -125,7 +125,6 @@ export class RequestDeliveryPage {
         this.storage.get('authToken').then( value => {
             this.applicationService.get(value).subscribe( data => {
                 this.packageTypes = data['data'][0].custom.packageTypes;
-                console.log('packageTypes', this.packageTypes);
             });
         });
     }

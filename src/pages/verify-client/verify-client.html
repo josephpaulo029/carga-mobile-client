@@ -40,6 +40,10 @@
         </ul>
     </div>
 
+    <div text-center margin-top margin-bottom *ngIf="isLoading">
+        <ion-spinner></ion-spinner>
+    </div>
+
     <div *ngIf="user.validationStatus == 'rejected' && !isLoading">
         <h3 text-center>Account rejected</h3>
         <p>We apologize but your application was rejected by the administrator because {{user.custom.rejectionReason}}.</p>

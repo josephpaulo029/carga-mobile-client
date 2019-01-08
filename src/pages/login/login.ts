@@ -42,14 +42,16 @@ export class LoginPage {
                     return;
                 }
 
+                this.events.publish('loggedIn');
+                this.notificationSocket.connect();
+                this.notificationSocket.emit('subscribe', data['response']);
+                this.menuCtrl.enable(true);
+
                 if(userObj.validationStatus === 'pending' || userObj.validationStatus === 'rejected') {
                     this.navCtrl.setRoot('VerifyClientPage');
                 } else {
                     this.navCtrl.push('TabsPage');
                 }
-                this.events.publish('loggedIn');
-                this.notificationSocket.emit('subscribe', data['response']);
-                this.menuCtrl.enable(true);
             });
         }, error => {
             let toast = this.toast.create({

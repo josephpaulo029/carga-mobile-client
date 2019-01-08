@@ -13,6 +13,7 @@ export class ChangePasswordPage {
 
     passwordObj: any = {};
     user: any = {};
+    isSaving: Boolean = false;
 
     constructor(private accountService: AccountService, 
         private toast: ToastController,
@@ -28,8 +29,10 @@ export class ChangePasswordPage {
     }
 
     changePassword(password) {
+        this.isSaving = true;
         this.storage.get('authToken').then( token => {
             this.accountService.changePassword(password, token).subscribe( data => {
+                this.isSaving = false;
                 let toast = this.toast.create({
                     message: 'Password has been updated successfully.',
                     duration: 3000,
