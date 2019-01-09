@@ -9,11 +9,13 @@ Quick Start
 1. npm install
 2. ionic serve
 
-Deployment
+Deployment - Staging
+1. Change variable isProduction to false under environment.ts
+2. Change config.xml version of config.stg.xml under configs folder
+3. Run deploy-staging.sh
 
-1. change _environment.prod.ts to environment.ts
-2. Change config.xml version
-3. ionic cordova build android --release
-4. keytool -genkey -v -keystore carga.keystore -alias carga -keyalg RSA -keysize 2048 -validity 10000 <!-- Not necessary when you already have .keystore file
-5. jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore .\carga.keystore .\app-release-unsigned.apk carga
+Deployment - Prod
+1. Change variable isProduction to true under environment.ts
+2. Change config.xml version of config.prod.xml under configs folder
+3. Run deploy-prod.sh
 6. zipalign -v 4 .\app-release-unsigned.apk carga.apk

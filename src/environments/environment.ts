@@ -1,7 +1,7 @@
-export const environment = {
-    production: false,
-    endpoint: 'https://apistg.cognity.io/v1',
-    socketUrl: 'https://cognity-bridge-websockets-stg.herokuapp.com',
-    apiKey: 'carga-api-key-stg-123',
-    notification: 'https://notification.cognity.io'
-};
+
+import { environment as prodEnv } from './environment.prod';
+import { environment as stgEnv } from './environment.stg';
+
+const isProduction  = true;
+
+export const environment = isProduction ? prodEnv : stgEnv;
