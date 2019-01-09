@@ -60,9 +60,15 @@ export class SignupPage {
             });
             toast.present();
             this.navCtrl.push('LoginPage');
-        }, err => {
+        }, error => {
+            let toast = this.toast.create({
+                message: 'Username already exists',
+                duration: 3000,
+                position: 'bottom'
+            });
+            toast.present();
             this.isLoading = false;
-        });
+        })
     }
 
     validateEmail(event) {

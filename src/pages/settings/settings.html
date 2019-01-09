@@ -13,7 +13,7 @@
     <div text-center margin-top *ngIf="isLoading">
         <ion-spinner></ion-spinner>
     </div>
-    <div class="image-container">
+    <div class="image-container" *ngIf="!isLoading">
         <img *ngIf="user.avatar !== 'null'" class="user-avatar" [src]="user.avatar" margin-bottom/>
         <img *ngIf="user.avatar === 'null'" class="user-avatar" src="assets/imgs/default-user.png" margin-bottom>
         <div class="image-upload" text-center>
