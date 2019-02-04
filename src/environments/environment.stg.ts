@@ -3,5 +3,5 @@ export const environment = {
     endpoint: 'https://apistg.cognity.io/v1',
     socketUrl: 'https://cognity-bridge-websockets-stg.herokuapp.com',
     apiKey: 'carga-api-key-stg-123',
-    notification: 'https://notification.cognity.io'
+    notification: 'https://cognity-bridge-ws-notif-stg.herokuapp.com'
 };
