@@ -37,6 +37,8 @@ export class ForgotPasswordPage {
 
     submit(user) {
         this.isLoading = true;
+        user.isMobile = true;
+        user.redirectionLink = "https://app.carga.io/reset-password-page";
         this.authService.forgotPassword(user).subscribe( data => {
             this.isLoading = false;
             this.currentPage = 2;
