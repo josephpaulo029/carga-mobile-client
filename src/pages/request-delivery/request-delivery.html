@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <button ion-button menuToggle>
-        <ion-icon name="menu"></ion-icon>
+            <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>
             Home
@@ -26,10 +26,10 @@
             </ion-item>
             <ion-item (click)="showModal('pickup')">
                 <ion-label>Pickup Location</ion-label>
-                <ion-input required [(ngModel)]="selectedPickup" disabled name="pickuplocation"></ion-input> 
+                <ion-input required [(ngModel)]="selectedPickup" disabled name="pickuplocation"></ion-input>
             </ion-item>
         </ion-list>
-    
+
         <ion-list *ngIf="currentPage == 2">
             <ion-item (click)="showModal('destination')">
                 <ion-label>Destination</ion-label>
@@ -40,8 +40,20 @@
                 <ion-input required [(ngModel)]="deliveryObj.custom.receiverContactNumber" name="contact"></ion-input>
             </ion-item>
         </ion-list>
-    
+
         <ion-list *ngIf="currentPage == 3">
+            <ion-item>
+                <ion-label>Location Area</ion-label>
+                <ion-select required [(ngModel)]="deliveryObj.location" name="type">
+                    <ion-option [value]="loc.value" *ngFor="let loc of locations">{{loc.display}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item>
+                <ion-label>Truck Type</ion-label>
+                <ion-select required [(ngModel)]="deliveryObj.truckType" name="type">
+                    <ion-option [value]="trucktype.value" *ngFor="let trucktype of truckTypes">{{trucktype.display}}</ion-option>
+                </ion-select>
+            </ion-item>
             <ion-item>
                 <ion-label>Package Type</ion-label>
                 <ion-select required [(ngModel)]="deliveryObj.packageType" name="type">
@@ -65,7 +77,7 @@
                 <ion-input type="number" required [(ngModel)]="height" name="length"></ion-input>
             </ion-item>
         </ion-list>
-        
+
         <ion-list *ngIf="currentPage == 4" class="details-container">
             <div>
                 <ion-item>
@@ -104,7 +116,7 @@
                 </ion-item>
                 <ion-item>
                     <ion-col class="value-text">Price</ion-col>
-                    <ion-col>Php 
+                    <ion-col>Php
                         <span *ngIf="!isLoading">
                             {{roundOff(deliveryPrice)}}
                         </span>

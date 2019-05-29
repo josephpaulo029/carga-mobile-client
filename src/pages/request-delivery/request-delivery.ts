@@ -50,6 +50,8 @@ export class RequestDeliveryPage {
     devices: any = [];
     vehicles: any = [];
     packageTypes: any = [];
+    locations: any = [];
+    truckTypes: any = [];
     loading: any;
     deliveryPrice: any;
     isLoading: Boolean = false;
@@ -125,6 +127,8 @@ export class RequestDeliveryPage {
         this.storage.get('authToken').then( value => {
             this.applicationService.get(value).subscribe( data => {
                 this.packageTypes = data['data'][0].custom.packageTypes;
+                this.locations = data['data'][0].custom.location;
+                this.truckTypes = data['data'][0].custom.truckType;
             });
         });
     }
@@ -272,17 +276,20 @@ export class RequestDeliveryPage {
                         });
                         this.loading.present();
                         let pricingObj = {
+                            location: this.deliveryObj.location,
+                            truckType: this.deliveryObj.truckType,
                             pickupLocation: this.deliveryObj.pickupLocation,
                             destination: this.deliveryObj.destination,
                             packageType: this.deliveryObj.packageType,
                             weight: this.deliveryObj.weight,
                             volume: this.length.toString() + 'x' + this.width.toString() + 'x' + this.height.toString()
                         };
+                        console.log(pricingObj)
                         this.pricingService.get(pricingObj, token).subscribe( data => {
                             this.isLoading = false;
                             this.deliveryPrice = data['data'].price;
                             this.loading.dismiss();
-                            if(!(this.deliveryObj.packageType && this.deliveryObj.weight && this.length && this.width && this.height)) {
+                            if(!(this.deliveryObj.packageType && this.deliveryObj.weight && this.length && this.width && this.height && this.deliveryObj.location && this.deliveryObj.truckType)) {
                                 this.errorVisitingPage();
                                 return;
                             }
